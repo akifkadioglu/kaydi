@@ -8,6 +8,37 @@ import (
 )
 
 var (
+	// ListsColumns holds the columns for the "lists" table.
+	ListsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID},
+		{Name: "name", Type: field.TypeString, Nullable: true},
+	}
+	// ListsTable holds the schema information for the "lists" table.
+	ListsTable = &schema.Table{
+		Name:       "lists",
+		Columns:    ListsColumns,
+		PrimaryKey: []*schema.Column{ListsColumns[0]},
+	}
+	// TasksColumns holds the columns for the "tasks" table.
+	TasksColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID},
+		{Name: "task", Type: field.TypeString, Size: 2147483647},
+		{Name: "list_tasks", Type: field.TypeUUID, Nullable: true},
+	}
+	// TasksTable holds the schema information for the "tasks" table.
+	TasksTable = &schema.Table{
+		Name:       "tasks",
+		Columns:    TasksColumns,
+		PrimaryKey: []*schema.Column{TasksColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "tasks_lists_tasks",
+				Columns:    []*schema.Column{TasksColumns[2]},
+				RefColumns: []*schema.Column{ListsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
 	// UsersColumns holds the columns for the "users" table.
 	UsersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID},
@@ -24,11 +55,70 @@ var (
 		Columns:    UsersColumns,
 		PrimaryKey: []*schema.Column{UsersColumns[0]},
 	}
+	// ListUsersColumns holds the columns for the "list_users" table.
+	ListUsersColumns = []*schema.Column{
+		{Name: "list_id", Type: field.TypeUUID},
+		{Name: "user_id", Type: field.TypeUUID},
+	}
+	// ListUsersTable holds the schema information for the "list_users" table.
+	ListUsersTable = &schema.Table{
+		Name:       "list_users",
+		Columns:    ListUsersColumns,
+		PrimaryKey: []*schema.Column{ListUsersColumns[0], ListUsersColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "list_users_list_id",
+				Columns:    []*schema.Column{ListUsersColumns[0]},
+				RefColumns: []*schema.Column{ListsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "list_users_user_id",
+				Columns:    []*schema.Column{ListUsersColumns[1]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// TaskUsersColumns holds the columns for the "task_users" table.
+	TaskUsersColumns = []*schema.Column{
+		{Name: "task_id", Type: field.TypeUUID},
+		{Name: "user_id", Type: field.TypeUUID},
+	}
+	// TaskUsersTable holds the schema information for the "task_users" table.
+	TaskUsersTable = &schema.Table{
+		Name:       "task_users",
+		Columns:    TaskUsersColumns,
+		PrimaryKey: []*schema.Column{TaskUsersColumns[0], TaskUsersColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "task_users_task_id",
+				Columns:    []*schema.Column{TaskUsersColumns[0]},
+				RefColumns: []*schema.Column{TasksColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "task_users_user_id",
+				Columns:    []*schema.Column{TaskUsersColumns[1]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
+		ListsTable,
+		TasksTable,
 		UsersTable,
+		ListUsersTable,
+		TaskUsersTable,
 	}
 )
 
 func init() {
+	TasksTable.ForeignKeys[0].RefTable = ListsTable
+	ListUsersTable.ForeignKeys[0].RefTable = ListsTable
+	ListUsersTable.ForeignKeys[1].RefTable = UsersTable
+	TaskUsersTable.ForeignKeys[0].RefTable = TasksTable
+	TaskUsersTable.ForeignKeys[1].RefTable = UsersTable
 }

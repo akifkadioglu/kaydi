@@ -12,6 +12,8 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/akifkadioglu/askida-kod/ent/list"
+	"github.com/akifkadioglu/askida-kod/ent/task"
 	"github.com/akifkadioglu/askida-kod/ent/user"
 )
 
@@ -73,6 +75,8 @@ var (
 func checkColumn(table, column string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
+			list.Table: list.ValidColumn,
+			task.Table: task.ValidColumn,
 			user.Table: user.ValidColumn,
 		})
 	})

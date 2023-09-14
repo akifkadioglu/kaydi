@@ -3,7 +3,9 @@
 package ent
 
 import (
+	"github.com/akifkadioglu/askida-kod/ent/list"
 	"github.com/akifkadioglu/askida-kod/ent/schema"
+	"github.com/akifkadioglu/askida-kod/ent/task"
 	"github.com/akifkadioglu/askida-kod/ent/user"
 	"github.com/google/uuid"
 )
@@ -12,6 +14,22 @@ import (
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
+	listFields := schema.List{}.Fields()
+	_ = listFields
+	// listDescID is the schema descriptor for id field.
+	listDescID := listFields[0].Descriptor()
+	// list.DefaultID holds the default value on creation for the id field.
+	list.DefaultID = listDescID.Default.(func() uuid.UUID)
+	taskFields := schema.Task{}.Fields()
+	_ = taskFields
+	// taskDescTask is the schema descriptor for task field.
+	taskDescTask := taskFields[1].Descriptor()
+	// task.TaskValidator is a validator for the "task" field. It is called by the builders before save.
+	task.TaskValidator = taskDescTask.Validators[0].(func(string) error)
+	// taskDescID is the schema descriptor for id field.
+	taskDescID := taskFields[0].Descriptor()
+	// task.DefaultID holds the default value on creation for the id field.
+	task.DefaultID = taskDescID.Default.(func() uuid.UUID)
 	userFields := schema.User{}.Fields()
 	_ = userFields
 	// userDescActivationID is the schema descriptor for activation_id field.

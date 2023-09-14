@@ -28,8 +28,40 @@ type User struct {
 	// IsActive holds the value of the "is_active" field.
 	IsActive bool `json:"is_active,omitempty"`
 	// Password holds the value of the "password" field.
-	Password     string `json:"-"`
+	Password string `json:"-"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the UserQuery when eager-loading is set.
+	Edges        UserEdges `json:"edges"`
 	selectValues sql.SelectValues
+}
+
+// UserEdges holds the relations/edges for other nodes in the graph.
+type UserEdges struct {
+	// Lists holds the value of the lists edge.
+	Lists []*List `json:"lists,omitempty"`
+	// Tasks holds the value of the tasks edge.
+	Tasks []*Task `json:"tasks,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [2]bool
+}
+
+// ListsOrErr returns the Lists value or an error if the edge
+// was not loaded in eager-loading.
+func (e UserEdges) ListsOrErr() ([]*List, error) {
+	if e.loadedTypes[0] {
+		return e.Lists, nil
+	}
+	return nil, &NotLoadedError{edge: "lists"}
+}
+
+// TasksOrErr returns the Tasks value or an error if the edge
+// was not loaded in eager-loading.
+func (e UserEdges) TasksOrErr() ([]*Task, error) {
+	if e.loadedTypes[1] {
+		return e.Tasks, nil
+	}
+	return nil, &NotLoadedError{edge: "tasks"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -111,6 +143,16 @@ func (u *User) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (u *User) Value(name string) (ent.Value, error) {
 	return u.selectValues.Get(name)
+}
+
+// QueryLists queries the "lists" edge of the User entity.
+func (u *User) QueryLists() *ListQuery {
+	return NewUserClient(u.config).QueryLists(u)
+}
+
+// QueryTasks queries the "tasks" edge of the User entity.
+func (u *User) QueryTasks() *TaskQuery {
+	return NewUserClient(u.config).QueryTasks(u)
 }
 
 // Update returns a builder for updating this User.

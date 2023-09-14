@@ -4,6 +4,7 @@ package user
 
 import (
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/google/uuid"
 )
 
@@ -24,8 +25,22 @@ const (
 	FieldIsActive = "is_active"
 	// FieldPassword holds the string denoting the password field in the database.
 	FieldPassword = "password"
+	// EdgeLists holds the string denoting the lists edge name in mutations.
+	EdgeLists = "lists"
+	// EdgeTasks holds the string denoting the tasks edge name in mutations.
+	EdgeTasks = "tasks"
 	// Table holds the table name of the user in the database.
 	Table = "users"
+	// ListsTable is the table that holds the lists relation/edge. The primary key declared below.
+	ListsTable = "list_users"
+	// ListsInverseTable is the table name for the List entity.
+	// It exists in this package in order to avoid circular dependency with the "list" package.
+	ListsInverseTable = "lists"
+	// TasksTable is the table that holds the tasks relation/edge. The primary key declared below.
+	TasksTable = "task_users"
+	// TasksInverseTable is the table name for the Task entity.
+	// It exists in this package in order to avoid circular dependency with the "task" package.
+	TasksInverseTable = "tasks"
 )
 
 // Columns holds all SQL columns for user fields.
@@ -38,6 +53,15 @@ var Columns = []string{
 	FieldIsActive,
 	FieldPassword,
 }
+
+var (
+	// ListsPrimaryKey and ListsColumn2 are the table columns denoting the
+	// primary key for the lists relation (M2M).
+	ListsPrimaryKey = []string{"list_id", "user_id"}
+	// TasksPrimaryKey and TasksColumn2 are the table columns denoting the
+	// primary key for the tasks relation (M2M).
+	TasksPrimaryKey = []string{"task_id", "user_id"}
+)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -94,4 +118,46 @@ func ByIsActive(opts ...sql.OrderTermOption) OrderOption {
 // ByPassword orders the results by the password field.
 func ByPassword(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPassword, opts...).ToFunc()
+}
+
+// ByListsCount orders the results by lists count.
+func ByListsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newListsStep(), opts...)
+	}
+}
+
+// ByLists orders the results by lists terms.
+func ByLists(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newListsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByTasksCount orders the results by tasks count.
+func ByTasksCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newTasksStep(), opts...)
+	}
+}
+
+// ByTasks orders the results by tasks terms.
+func ByTasks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTasksStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+func newListsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ListsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ListsTable, ListsPrimaryKey...),
+	)
+}
+func newTasksStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TasksInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, TasksTable, TasksPrimaryKey...),
+	)
 }
