@@ -6,7 +6,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/akifkadioglu/askida-kod/ent"
+	"github.com/akifkadioglu/kaydi/ent"
 )
 
 // The ListFunc type is an adapter to allow the use of ordinary

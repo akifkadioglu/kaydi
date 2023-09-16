@@ -6,12 +6,13 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/akifkadioglu/askida-kod/ent/list"
-	"github.com/akifkadioglu/askida-kod/ent/task"
-	"github.com/akifkadioglu/askida-kod/ent/user"
+	"github.com/akifkadioglu/kaydi/ent/list"
+	"github.com/akifkadioglu/kaydi/ent/task"
+	"github.com/akifkadioglu/kaydi/ent/user"
 	"github.com/google/uuid"
 )
 
@@ -25,6 +26,20 @@ type TaskCreate struct {
 // SetTask sets the "task" field.
 func (tc *TaskCreate) SetTask(s string) *TaskCreate {
 	tc.mutation.SetTask(s)
+	return tc
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (tc *TaskCreate) SetCreatedAt(t time.Time) *TaskCreate {
+	tc.mutation.SetCreatedAt(t)
+	return tc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableCreatedAt(t *time.Time) *TaskCreate {
+	if t != nil {
+		tc.SetCreatedAt(*t)
+	}
 	return tc
 }
 
@@ -111,6 +126,10 @@ func (tc *TaskCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (tc *TaskCreate) defaults() {
+	if _, ok := tc.mutation.CreatedAt(); !ok {
+		v := task.DefaultCreatedAt
+		tc.mutation.SetCreatedAt(v)
+	}
 	if _, ok := tc.mutation.ID(); !ok {
 		v := task.DefaultID()
 		tc.mutation.SetID(v)
@@ -126,6 +145,9 @@ func (tc *TaskCreate) check() error {
 		if err := task.TaskValidator(v); err != nil {
 			return &ValidationError{Name: "task", err: fmt.Errorf(`ent: validator failed for field "Task.task": %w`, err)}
 		}
+	}
+	if _, ok := tc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Task.created_at"`)}
 	}
 	return nil
 }
@@ -165,6 +187,10 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 	if value, ok := tc.mutation.Task(); ok {
 		_spec.SetField(task.FieldTask, field.TypeString, value)
 		_node.Task = value
+	}
+	if value, ok := tc.mutation.CreatedAt(); ok {
+		_spec.SetField(task.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
 	}
 	if nodes := tc.mutation.ListIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

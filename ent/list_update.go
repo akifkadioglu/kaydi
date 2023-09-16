@@ -10,10 +10,10 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/akifkadioglu/askida-kod/ent/list"
-	"github.com/akifkadioglu/askida-kod/ent/predicate"
-	"github.com/akifkadioglu/askida-kod/ent/task"
-	"github.com/akifkadioglu/askida-kod/ent/user"
+	"github.com/akifkadioglu/kaydi/ent/list"
+	"github.com/akifkadioglu/kaydi/ent/predicate"
+	"github.com/akifkadioglu/kaydi/ent/task"
+	"github.com/akifkadioglu/kaydi/ent/user"
 	"github.com/google/uuid"
 )
 
@@ -47,6 +47,12 @@ func (lu *ListUpdate) SetNillableName(s *string) *ListUpdate {
 // ClearName clears the value of the "name" field.
 func (lu *ListUpdate) ClearName() *ListUpdate {
 	lu.mutation.ClearName()
+	return lu
+}
+
+// SetColor sets the "color" field.
+func (lu *ListUpdate) SetColor(s string) *ListUpdate {
+	lu.mutation.SetColor(s)
 	return lu
 }
 
@@ -168,6 +174,9 @@ func (lu *ListUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if lu.mutation.NameCleared() {
 		_spec.ClearField(list.FieldName, field.TypeString)
+	}
+	if value, ok := lu.mutation.Color(); ok {
+		_spec.SetField(list.FieldColor, field.TypeString, value)
 	}
 	if lu.mutation.TasksCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -296,6 +305,12 @@ func (luo *ListUpdateOne) SetNillableName(s *string) *ListUpdateOne {
 // ClearName clears the value of the "name" field.
 func (luo *ListUpdateOne) ClearName() *ListUpdateOne {
 	luo.mutation.ClearName()
+	return luo
+}
+
+// SetColor sets the "color" field.
+func (luo *ListUpdateOne) SetColor(s string) *ListUpdateOne {
+	luo.mutation.SetColor(s)
 	return luo
 }
 
@@ -447,6 +462,9 @@ func (luo *ListUpdateOne) sqlSave(ctx context.Context) (_node *List, err error) 
 	}
 	if luo.mutation.NameCleared() {
 		_spec.ClearField(list.FieldName, field.TypeString)
+	}
+	if value, ok := luo.mutation.Color(); ok {
+		_spec.SetField(list.FieldColor, field.TypeString, value)
 	}
 	if luo.mutation.TasksCleared() {
 		edge := &sqlgraph.EdgeSpec{

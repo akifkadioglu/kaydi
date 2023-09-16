@@ -3,10 +3,10 @@ package route
 import (
 	"net/http"
 
-	"github.com/akifkadioglu/askida-kod/pkg/auth"
-	"github.com/akifkadioglu/askida-kod/pkg/email"
-	"github.com/akifkadioglu/askida-kod/pkg/home"
-	"github.com/akifkadioglu/askida-kod/utils"
+	"github.com/akifkadioglu/kaydi/pkg/auth"
+	"github.com/akifkadioglu/kaydi/pkg/email"
+	"github.com/akifkadioglu/kaydi/pkg/home"
+	"github.com/akifkadioglu/kaydi/utils"
 
 	"github.com/dghubble/gologin/v2"
 	"github.com/dghubble/gologin/v2/google"

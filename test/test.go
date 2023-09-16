@@ -8,10 +8,10 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/akifkadioglu/askida-kod/database"
-	"github.com/akifkadioglu/askida-kod/env"
-	"github.com/akifkadioglu/askida-kod/route"
-	"github.com/akifkadioglu/askida-kod/utils"
+	"github.com/akifkadioglu/kaydi/database"
+	"github.com/akifkadioglu/kaydi/env"
+	"github.com/akifkadioglu/kaydi/route"
+	"github.com/akifkadioglu/kaydi/utils"
 )
 
 func setupTest() {

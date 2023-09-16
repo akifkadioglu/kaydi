@@ -5,12 +5,12 @@ package enttest
 import (
 	"context"
 
-	"github.com/akifkadioglu/askida-kod/ent"
+	"github.com/akifkadioglu/kaydi/ent"
 	// required by schema hooks.
-	_ "github.com/akifkadioglu/askida-kod/ent/runtime"
+	_ "github.com/akifkadioglu/kaydi/ent/runtime"
 
 	"entgo.io/ent/dialect/sql/schema"
-	"github.com/akifkadioglu/askida-kod/ent/migrate"
+	"github.com/akifkadioglu/kaydi/ent/migrate"
 )
 
 type (

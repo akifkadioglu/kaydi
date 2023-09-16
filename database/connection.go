@@ -4,8 +4,8 @@ import (
 	"context"
 	"log"
 
-	"github.com/akifkadioglu/askida-kod/ent"
-	"github.com/akifkadioglu/askida-kod/env"
+	"github.com/akifkadioglu/kaydi/ent"
+	"github.com/akifkadioglu/kaydi/env"
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3"

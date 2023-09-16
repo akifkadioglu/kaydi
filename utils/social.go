@@ -1,9 +1,9 @@
 package utils
 
 import (
-	"github.com/akifkadioglu/askida-kod/env"
-	"github.com/akifkadioglu/askida-kod/models"
-	"github.com/akifkadioglu/askida-kod/variables"
+	"github.com/akifkadioglu/kaydi/env"
+	"github.com/akifkadioglu/kaydi/models"
+	"github.com/akifkadioglu/kaydi/variables"
 	"golang.org/x/oauth2"
 	googleOAuth2 "golang.org/x/oauth2/google"
 )

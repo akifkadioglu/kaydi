@@ -3,6 +3,8 @@
 package task
 
 import (
+	"time"
+
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/google/uuid"
@@ -15,6 +17,8 @@ const (
 	FieldID = "id"
 	// FieldTask holds the string denoting the task field in the database.
 	FieldTask = "task"
+	// FieldCreatedAt holds the string denoting the created_at field in the database.
+	FieldCreatedAt = "created_at"
 	// EdgeList holds the string denoting the list edge name in mutations.
 	EdgeList = "list"
 	// EdgeUsers holds the string denoting the users edge name in mutations.
@@ -39,6 +43,7 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldTask,
+	FieldCreatedAt,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "tasks"
@@ -71,6 +76,8 @@ func ValidColumn(column string) bool {
 var (
 	// TaskValidator is a validator for the "task" field. It is called by the builders before save.
 	TaskValidator func(string) error
+	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
+	DefaultCreatedAt time.Time
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() uuid.UUID
 )
@@ -86,6 +93,11 @@ func ByID(opts ...sql.OrderTermOption) OrderOption {
 // ByTask orders the results by the task field.
 func ByTask(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTask, opts...).ToFunc()
+}
+
+// ByCreatedAt orders the results by the created_at field.
+func ByCreatedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreatedAt, opts...).ToFunc()
 }
 
 // ByListField orders the results by list field.

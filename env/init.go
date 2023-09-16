@@ -49,7 +49,7 @@ func InitEnv(t int) {
 		err = godotenv.Load(filepath.Join("./env", ".env"))
 
 	case PROD:
-		err = godotenv.Load(filepath.Join("/etc/secrets", ".env"))
+		err = godotenv.Load(filepath.Join("./etc/secrets", ".env"))
 	}
 
 	if err != nil {

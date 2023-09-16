@@ -4,13 +4,14 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/akifkadioglu/askida-kod/ent/list"
-	"github.com/akifkadioglu/askida-kod/ent/task"
-	"github.com/akifkadioglu/askida-kod/ent/user"
+	"github.com/akifkadioglu/kaydi/ent/list"
+	"github.com/akifkadioglu/kaydi/ent/task"
+	"github.com/akifkadioglu/kaydi/ent/user"
 	"github.com/google/uuid"
 )
 
@@ -32,6 +33,12 @@ func (lc *ListCreate) SetNillableName(s *string) *ListCreate {
 	if s != nil {
 		lc.SetName(*s)
 	}
+	return lc
+}
+
+// SetColor sets the "color" field.
+func (lc *ListCreate) SetColor(s string) *ListCreate {
+	lc.mutation.SetColor(s)
 	return lc
 }
 
@@ -122,6 +129,9 @@ func (lc *ListCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (lc *ListCreate) check() error {
+	if _, ok := lc.mutation.Color(); !ok {
+		return &ValidationError{Name: "color", err: errors.New(`ent: missing required field "List.color"`)}
+	}
 	return nil
 }
 
@@ -160,6 +170,10 @@ func (lc *ListCreate) createSpec() (*List, *sqlgraph.CreateSpec) {
 	if value, ok := lc.mutation.Name(); ok {
 		_spec.SetField(list.FieldName, field.TypeString, value)
 		_node.Name = value
+	}
+	if value, ok := lc.mutation.Color(); ok {
+		_spec.SetField(list.FieldColor, field.TypeString, value)
+		_node.Color = &value
 	}
 	if nodes := lc.mutation.TasksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

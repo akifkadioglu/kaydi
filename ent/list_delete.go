@@ -8,8 +8,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/akifkadioglu/askida-kod/ent/list"
-	"github.com/akifkadioglu/askida-kod/ent/predicate"
+	"github.com/akifkadioglu/kaydi/ent/list"
+	"github.com/akifkadioglu/kaydi/ent/predicate"
 )
 
 // ListDelete is the builder for deleting a List entity.

@@ -3,10 +3,12 @@
 package ent
 
 import (
-	"github.com/akifkadioglu/askida-kod/ent/list"
-	"github.com/akifkadioglu/askida-kod/ent/schema"
-	"github.com/akifkadioglu/askida-kod/ent/task"
-	"github.com/akifkadioglu/askida-kod/ent/user"
+	"time"
+
+	"github.com/akifkadioglu/kaydi/ent/list"
+	"github.com/akifkadioglu/kaydi/ent/schema"
+	"github.com/akifkadioglu/kaydi/ent/task"
+	"github.com/akifkadioglu/kaydi/ent/user"
 	"github.com/google/uuid"
 )
 
@@ -26,6 +28,10 @@ func init() {
 	taskDescTask := taskFields[1].Descriptor()
 	// task.TaskValidator is a validator for the "task" field. It is called by the builders before save.
 	task.TaskValidator = taskDescTask.Validators[0].(func(string) error)
+	// taskDescCreatedAt is the schema descriptor for created_at field.
+	taskDescCreatedAt := taskFields[2].Descriptor()
+	// task.DefaultCreatedAt holds the default value on creation for the created_at field.
+	task.DefaultCreatedAt = taskDescCreatedAt.Default.(time.Time)
 	// taskDescID is the schema descriptor for id field.
 	taskDescID := taskFields[0].Descriptor()
 	// task.DefaultID holds the default value on creation for the id field.

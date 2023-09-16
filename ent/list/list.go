@@ -15,6 +15,8 @@ const (
 	FieldID = "id"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
+	// FieldColor holds the string denoting the color field in the database.
+	FieldColor = "color"
 	// EdgeTasks holds the string denoting the tasks edge name in mutations.
 	EdgeTasks = "tasks"
 	// EdgeUsers holds the string denoting the users edge name in mutations.
@@ -39,6 +41,7 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldName,
+	FieldColor,
 }
 
 var (
@@ -73,6 +76,11 @@ func ByID(opts ...sql.OrderTermOption) OrderOption {
 // ByName orders the results by the name field.
 func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
+}
+
+// ByColor orders the results by the color field.
+func ByColor(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldColor, opts...).ToFunc()
 }
 
 // ByTasksCount orders the results by tasks count.

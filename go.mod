@@ -1,4 +1,4 @@
-module github.com/akifkadioglu/askida-kod
+module github.com/akifkadioglu/kaydi
 
 go 1.20
 

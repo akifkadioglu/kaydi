@@ -6,14 +6,15 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/akifkadioglu/askida-kod/ent/list"
-	"github.com/akifkadioglu/askida-kod/ent/predicate"
-	"github.com/akifkadioglu/askida-kod/ent/task"
-	"github.com/akifkadioglu/askida-kod/ent/user"
+	"github.com/akifkadioglu/kaydi/ent/list"
+	"github.com/akifkadioglu/kaydi/ent/predicate"
+	"github.com/akifkadioglu/kaydi/ent/task"
+	"github.com/akifkadioglu/kaydi/ent/user"
 	"github.com/google/uuid"
 )
 
@@ -33,6 +34,20 @@ func (tu *TaskUpdate) Where(ps ...predicate.Task) *TaskUpdate {
 // SetTask sets the "task" field.
 func (tu *TaskUpdate) SetTask(s string) *TaskUpdate {
 	tu.mutation.SetTask(s)
+	return tu
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (tu *TaskUpdate) SetCreatedAt(t time.Time) *TaskUpdate {
+	tu.mutation.SetCreatedAt(t)
+	return tu
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableCreatedAt(t *time.Time) *TaskUpdate {
+	if t != nil {
+		tu.SetCreatedAt(*t)
+	}
 	return tu
 }
 
@@ -154,6 +169,9 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := tu.mutation.Task(); ok {
 		_spec.SetField(task.FieldTask, field.TypeString, value)
 	}
+	if value, ok := tu.mutation.CreatedAt(); ok {
+		_spec.SetField(task.FieldCreatedAt, field.TypeTime, value)
+	}
 	if tu.mutation.ListCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -251,6 +269,20 @@ type TaskUpdateOne struct {
 // SetTask sets the "task" field.
 func (tuo *TaskUpdateOne) SetTask(s string) *TaskUpdateOne {
 	tuo.mutation.SetTask(s)
+	return tuo
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (tuo *TaskUpdateOne) SetCreatedAt(t time.Time) *TaskUpdateOne {
+	tuo.mutation.SetCreatedAt(t)
+	return tuo
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableCreatedAt(t *time.Time) *TaskUpdateOne {
+	if t != nil {
+		tuo.SetCreatedAt(*t)
+	}
 	return tuo
 }
 
@@ -401,6 +433,9 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 	}
 	if value, ok := tuo.mutation.Task(); ok {
 		_spec.SetField(task.FieldTask, field.TypeString, value)
+	}
+	if value, ok := tuo.mutation.CreatedAt(); ok {
+		_spec.SetField(task.FieldCreatedAt, field.TypeTime, value)
 	}
 	if tuo.mutation.ListCleared() {
 		edge := &sqlgraph.EdgeSpec{

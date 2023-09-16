@@ -5,11 +5,12 @@ package ent
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/akifkadioglu/askida-kod/ent/list"
-	"github.com/akifkadioglu/askida-kod/ent/task"
+	"github.com/akifkadioglu/kaydi/ent/list"
+	"github.com/akifkadioglu/kaydi/ent/task"
 	"github.com/google/uuid"
 )
 
@@ -20,6 +21,8 @@ type Task struct {
 	ID uuid.UUID `json:"id,omitempty"`
 	// Task holds the value of the "task" field.
 	Task string `json:"task,omitempty"`
+	// CreatedAt holds the value of the "created_at" field.
+	CreatedAt time.Time `json:"created_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TaskQuery when eager-loading is set.
 	Edges        TaskEdges `json:"edges"`
@@ -67,6 +70,8 @@ func (*Task) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case task.FieldTask:
 			values[i] = new(sql.NullString)
+		case task.FieldCreatedAt:
+			values[i] = new(sql.NullTime)
 		case task.FieldID:
 			values[i] = new(uuid.UUID)
 		case task.ForeignKeys[0]: // list_tasks
@@ -97,6 +102,12 @@ func (t *Task) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field task", values[i])
 			} else if value.Valid {
 				t.Task = value.String
+			}
+		case task.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				t.CreatedAt = value.Time
 			}
 		case task.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullScanner); !ok {
@@ -153,6 +164,9 @@ func (t *Task) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v, ", t.ID))
 	builder.WriteString("task=")
 	builder.WriteString(t.Task)
+	builder.WriteString(", ")
+	builder.WriteString("created_at=")
+	builder.WriteString(t.CreatedAt.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -8,16 +8,16 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/akifkadioglu/askida-kod/ent/migrate"
+	"github.com/akifkadioglu/kaydi/ent/migrate"
 	"github.com/google/uuid"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"github.com/akifkadioglu/askida-kod/ent/list"
-	"github.com/akifkadioglu/askida-kod/ent/task"
-	"github.com/akifkadioglu/askida-kod/ent/user"
+	"github.com/akifkadioglu/kaydi/ent/list"
+	"github.com/akifkadioglu/kaydi/ent/task"
+	"github.com/akifkadioglu/kaydi/ent/user"
 )
 
 // Client is the client that holds all ent builders.

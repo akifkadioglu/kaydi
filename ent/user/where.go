@@ -5,7 +5,7 @@ package user
 import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"github.com/akifkadioglu/askida-kod/ent/predicate"
+	"github.com/akifkadioglu/kaydi/ent/predicate"
 	"github.com/google/uuid"
 )
 

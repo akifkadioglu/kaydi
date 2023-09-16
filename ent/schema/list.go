@@ -18,6 +18,7 @@ func (List) Fields() []ent.Field {
 		field.UUID("id", uuid.UUID{}).
 			Default(uuid.New),
 		field.String("name").Optional(),
+		field.String("color").Nillable(),
 	}
 }
 

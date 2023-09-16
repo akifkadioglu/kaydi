@@ -8,7 +8,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/akifkadioglu/askida-kod/ent/list"
+	"github.com/akifkadioglu/kaydi/ent/list"
 	"github.com/google/uuid"
 )
 
@@ -19,6 +19,8 @@ type List struct {
 	ID uuid.UUID `json:"id,omitempty"`
 	// Name holds the value of the "name" field.
 	Name string `json:"name,omitempty"`
+	// Color holds the value of the "color" field.
+	Color *string `json:"color,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ListQuery when eager-loading is set.
 	Edges        ListEdges `json:"edges"`
@@ -59,7 +61,7 @@ func (*List) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case list.FieldName:
+		case list.FieldName, list.FieldColor:
 			values[i] = new(sql.NullString)
 		case list.FieldID:
 			values[i] = new(uuid.UUID)
@@ -89,6 +91,13 @@ func (l *List) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
 				l.Name = value.String
+			}
+		case list.FieldColor:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field color", values[i])
+			} else if value.Valid {
+				l.Color = new(string)
+				*l.Color = value.String
 			}
 		default:
 			l.selectValues.Set(columns[i], values[i])
@@ -138,6 +147,11 @@ func (l *List) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v, ", l.ID))
 	builder.WriteString("name=")
 	builder.WriteString(l.Name)
+	builder.WriteString(", ")
+	if v := l.Color; v != nil {
+		builder.WriteString("color=")
+		builder.WriteString(*v)
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

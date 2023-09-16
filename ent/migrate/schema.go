@@ -12,6 +12,7 @@ var (
 	ListsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID},
 		{Name: "name", Type: field.TypeString, Nullable: true},
+		{Name: "color", Type: field.TypeString},
 	}
 	// ListsTable holds the schema information for the "lists" table.
 	ListsTable = &schema.Table{
@@ -23,6 +24,7 @@ var (
 	TasksColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID},
 		{Name: "task", Type: field.TypeString, Size: 2147483647},
+		{Name: "created_at", Type: field.TypeTime},
 		{Name: "list_tasks", Type: field.TypeUUID, Nullable: true},
 	}
 	// TasksTable holds the schema information for the "tasks" table.
@@ -33,7 +35,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "tasks_lists_tasks",
-				Columns:    []*schema.Column{TasksColumns[2]},
+				Columns:    []*schema.Column{TasksColumns[3]},
 				RefColumns: []*schema.Column{ListsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

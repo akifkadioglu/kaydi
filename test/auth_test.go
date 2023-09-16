@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/akifkadioglu/askida-kod/pkg/auth"
-	"github.com/akifkadioglu/askida-kod/route"
+	"github.com/akifkadioglu/kaydi/pkg/auth"
+	"github.com/akifkadioglu/kaydi/route"
 )
 
 func TestAuth(t *testing.T) {

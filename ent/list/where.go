@@ -5,7 +5,7 @@ package list
 import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"github.com/akifkadioglu/askida-kod/ent/predicate"
+	"github.com/akifkadioglu/kaydi/ent/predicate"
 	"github.com/google/uuid"
 )
 
@@ -57,6 +57,11 @@ func IDLTE(id uuid.UUID) predicate.List {
 // Name applies equality check predicate on the "name" field. It's identical to NameEQ.
 func Name(v string) predicate.List {
 	return predicate.List(sql.FieldEQ(FieldName, v))
+}
+
+// Color applies equality check predicate on the "color" field. It's identical to ColorEQ.
+func Color(v string) predicate.List {
+	return predicate.List(sql.FieldEQ(FieldColor, v))
 }
 
 // NameEQ applies the EQ predicate on the "name" field.
@@ -132,6 +137,71 @@ func NameEqualFold(v string) predicate.List {
 // NameContainsFold applies the ContainsFold predicate on the "name" field.
 func NameContainsFold(v string) predicate.List {
 	return predicate.List(sql.FieldContainsFold(FieldName, v))
+}
+
+// ColorEQ applies the EQ predicate on the "color" field.
+func ColorEQ(v string) predicate.List {
+	return predicate.List(sql.FieldEQ(FieldColor, v))
+}
+
+// ColorNEQ applies the NEQ predicate on the "color" field.
+func ColorNEQ(v string) predicate.List {
+	return predicate.List(sql.FieldNEQ(FieldColor, v))
+}
+
+// ColorIn applies the In predicate on the "color" field.
+func ColorIn(vs ...string) predicate.List {
+	return predicate.List(sql.FieldIn(FieldColor, vs...))
+}
+
+// ColorNotIn applies the NotIn predicate on the "color" field.
+func ColorNotIn(vs ...string) predicate.List {
+	return predicate.List(sql.FieldNotIn(FieldColor, vs...))
+}
+
+// ColorGT applies the GT predicate on the "color" field.
+func ColorGT(v string) predicate.List {
+	return predicate.List(sql.FieldGT(FieldColor, v))
+}
+
+// ColorGTE applies the GTE predicate on the "color" field.
+func ColorGTE(v string) predicate.List {
+	return predicate.List(sql.FieldGTE(FieldColor, v))
+}
+
+// ColorLT applies the LT predicate on the "color" field.
+func ColorLT(v string) predicate.List {
+	return predicate.List(sql.FieldLT(FieldColor, v))
+}
+
+// ColorLTE applies the LTE predicate on the "color" field.
+func ColorLTE(v string) predicate.List {
+	return predicate.List(sql.FieldLTE(FieldColor, v))
+}
+
+// ColorContains applies the Contains predicate on the "color" field.
+func ColorContains(v string) predicate.List {
+	return predicate.List(sql.FieldContains(FieldColor, v))
+}
+
+// ColorHasPrefix applies the HasPrefix predicate on the "color" field.
+func ColorHasPrefix(v string) predicate.List {
+	return predicate.List(sql.FieldHasPrefix(FieldColor, v))
+}
+
+// ColorHasSuffix applies the HasSuffix predicate on the "color" field.
+func ColorHasSuffix(v string) predicate.List {
+	return predicate.List(sql.FieldHasSuffix(FieldColor, v))
+}
+
+// ColorEqualFold applies the EqualFold predicate on the "color" field.
+func ColorEqualFold(v string) predicate.List {
+	return predicate.List(sql.FieldEqualFold(FieldColor, v))
+}
+
+// ColorContainsFold applies the ContainsFold predicate on the "color" field.
+func ColorContainsFold(v string) predicate.List {
+	return predicate.List(sql.FieldContainsFold(FieldColor, v))
 }
 
 // HasTasks applies the HasEdge predicate on the "tasks" edge.

@@ -3,10 +3,10 @@ package email
 import (
 	"net/http"
 
-	"github.com/akifkadioglu/askida-kod/database"
-	"github.com/akifkadioglu/askida-kod/ent/user"
-	"github.com/akifkadioglu/askida-kod/resources/emails"
-	"github.com/akifkadioglu/askida-kod/utils"
+	"github.com/akifkadioglu/kaydi/database"
+	"github.com/akifkadioglu/kaydi/ent/user"
+	"github.com/akifkadioglu/kaydi/resources/emails"
+	"github.com/akifkadioglu/kaydi/utils"
 	"github.com/go-chi/render"
 )
 

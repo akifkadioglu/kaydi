@@ -3,8 +3,8 @@ package utils
 import (
 	"net/http"
 
-	"github.com/akifkadioglu/askida-kod/env"
-	"github.com/akifkadioglu/askida-kod/models"
+	"github.com/akifkadioglu/kaydi/env"
+	"github.com/akifkadioglu/kaydi/models"
 	"github.com/go-chi/jwtauth/v5"
 )
 

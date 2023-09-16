@@ -7,13 +7,14 @@ import (
 	"errors"
 	"fmt"
 	"sync"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/akifkadioglu/askida-kod/ent/list"
-	"github.com/akifkadioglu/askida-kod/ent/predicate"
-	"github.com/akifkadioglu/askida-kod/ent/task"
-	"github.com/akifkadioglu/askida-kod/ent/user"
+	"github.com/akifkadioglu/kaydi/ent/list"
+	"github.com/akifkadioglu/kaydi/ent/predicate"
+	"github.com/akifkadioglu/kaydi/ent/task"
+	"github.com/akifkadioglu/kaydi/ent/user"
 	"github.com/google/uuid"
 )
 
@@ -38,6 +39,7 @@ type ListMutation struct {
 	typ           string
 	id            *uuid.UUID
 	name          *string
+	color         *string
 	clearedFields map[string]struct{}
 	tasks         map[uuid.UUID]struct{}
 	removedtasks  map[uuid.UUID]struct{}
@@ -203,6 +205,42 @@ func (m *ListMutation) ResetName() {
 	delete(m.clearedFields, list.FieldName)
 }
 
+// SetColor sets the "color" field.
+func (m *ListMutation) SetColor(s string) {
+	m.color = &s
+}
+
+// Color returns the value of the "color" field in the mutation.
+func (m *ListMutation) Color() (r string, exists bool) {
+	v := m.color
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldColor returns the old "color" field's value of the List entity.
+// If the List object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ListMutation) OldColor(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldColor is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldColor requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldColor: %w", err)
+	}
+	return oldValue.Color, nil
+}
+
+// ResetColor resets all changes to the "color" field.
+func (m *ListMutation) ResetColor() {
+	m.color = nil
+}
+
 // AddTaskIDs adds the "tasks" edge to the Task entity by ids.
 func (m *ListMutation) AddTaskIDs(ids ...uuid.UUID) {
 	if m.tasks == nil {
@@ -345,9 +383,12 @@ func (m *ListMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ListMutation) Fields() []string {
-	fields := make([]string, 0, 1)
+	fields := make([]string, 0, 2)
 	if m.name != nil {
 		fields = append(fields, list.FieldName)
+	}
+	if m.color != nil {
+		fields = append(fields, list.FieldColor)
 	}
 	return fields
 }
@@ -359,6 +400,8 @@ func (m *ListMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case list.FieldName:
 		return m.Name()
+	case list.FieldColor:
+		return m.Color()
 	}
 	return nil, false
 }
@@ -370,6 +413,8 @@ func (m *ListMutation) OldField(ctx context.Context, name string) (ent.Value, er
 	switch name {
 	case list.FieldName:
 		return m.OldName(ctx)
+	case list.FieldColor:
+		return m.OldColor(ctx)
 	}
 	return nil, fmt.Errorf("unknown List field %s", name)
 }
@@ -385,6 +430,13 @@ func (m *ListMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetName(v)
+		return nil
+	case list.FieldColor:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetColor(v)
 		return nil
 	}
 	return fmt.Errorf("unknown List field %s", name)
@@ -446,6 +498,9 @@ func (m *ListMutation) ResetField(name string) error {
 	switch name {
 	case list.FieldName:
 		m.ResetName()
+		return nil
+	case list.FieldColor:
+		m.ResetColor()
 		return nil
 	}
 	return fmt.Errorf("unknown List field %s", name)
@@ -568,6 +623,7 @@ type TaskMutation struct {
 	typ           string
 	id            *uuid.UUID
 	task          *string
+	created_at    *time.Time
 	clearedFields map[string]struct{}
 	list          *uuid.UUID
 	clearedlist   bool
@@ -719,6 +775,42 @@ func (m *TaskMutation) ResetTask() {
 	m.task = nil
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (m *TaskMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *TaskMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *TaskMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
 // SetListID sets the "list" edge to the List entity by id.
 func (m *TaskMutation) SetListID(id uuid.UUID) {
 	m.list = &id
@@ -846,9 +938,12 @@ func (m *TaskMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TaskMutation) Fields() []string {
-	fields := make([]string, 0, 1)
+	fields := make([]string, 0, 2)
 	if m.task != nil {
 		fields = append(fields, task.FieldTask)
+	}
+	if m.created_at != nil {
+		fields = append(fields, task.FieldCreatedAt)
 	}
 	return fields
 }
@@ -860,6 +955,8 @@ func (m *TaskMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case task.FieldTask:
 		return m.Task()
+	case task.FieldCreatedAt:
+		return m.CreatedAt()
 	}
 	return nil, false
 }
@@ -871,6 +968,8 @@ func (m *TaskMutation) OldField(ctx context.Context, name string) (ent.Value, er
 	switch name {
 	case task.FieldTask:
 		return m.OldTask(ctx)
+	case task.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
 	}
 	return nil, fmt.Errorf("unknown Task field %s", name)
 }
@@ -886,6 +985,13 @@ func (m *TaskMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetTask(v)
+		return nil
+	case task.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Task field %s", name)
@@ -938,6 +1044,9 @@ func (m *TaskMutation) ResetField(name string) error {
 	switch name {
 	case task.FieldTask:
 		m.ResetTask()
+		return nil
+	case task.FieldCreatedAt:
+		m.ResetCreatedAt()
 		return nil
 	}
 	return fmt.Errorf("unknown Task field %s", name)

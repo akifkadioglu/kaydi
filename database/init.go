@@ -1,7 +1,7 @@
 package database
 
 import (
-	"github.com/akifkadioglu/askida-kod/ent"
+	"github.com/akifkadioglu/kaydi/ent"
 )
 
 var client *ent.Client

@@ -3,7 +3,7 @@ package utils
 import (
 	"strconv"
 
-	"github.com/akifkadioglu/askida-kod/env"
+	"github.com/akifkadioglu/kaydi/env"
 	gomail "gopkg.in/mail.v2"
 )
 

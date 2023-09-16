@@ -1,7 +1,7 @@
 package emails
 
 import (
-	"github.com/akifkadioglu/askida-kod/variables"
+	"github.com/akifkadioglu/kaydi/variables"
 	"github.com/matcornic/hermes/v2"
 )
 
