@@ -14,11 +14,7 @@ type BodyDelete struct {
 }
 
 type BodyAddUser struct {
-	UserID string `json:"user_id"`
-	ListID string `json:"list_id"`
-}
-
-type BodyRemoveUser struct {
-	UserID string `json:"user_id"`
-	ListID string `json:"list_id"`
+	UserID   string `json:"user_id"`
+	ListID   string `json:"list_id"`
+	IsAdding bool   `json:"is_adding"`
 }

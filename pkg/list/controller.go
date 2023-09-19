@@ -18,8 +18,12 @@ func Lists(w http.ResponseWriter, r *http.Request) {
 	userByJWT := utils.GetUser(r)
 	parsedJWTID, _ := uuid.Parse(userByJWT.ID)
 
-	userByDB, _ := db.User.Query().Where(user.IDEQ(parsedJWTID)).First(r.Context())
-	lists, _ := db.User.QueryLists(userByDB).WithTasks().All(r.Context())
+	userByDB, _ := db.User.Query().
+		Where(user.IDEQ(parsedJWTID)).
+		First(r.Context())
+
+	lists, _ := db.User.QueryLists(userByDB).
+		All(r.Context())
 
 	render.JSON(w, r, map[string][]*ent.List{
 		"list": lists,
@@ -38,18 +42,14 @@ func Create(w http.ResponseWriter, r *http.Request) {
 	_, err := db.List.Create().
 		AddUserIDs(parsedJWTID).
 		SetName(input.Name).
+		SetColor(input.Color).
 		Save(r.Context())
 
 	if err != nil {
-		render.JSON(w, r, map[string]string{
-			"err": err.Error(),
-		})
+		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	render.JSON(w, r, map[string]string{
-		"msg": "The List created",
-	})
 }
 
 func Update(w http.ResponseWriter, r *http.Request) {
@@ -70,7 +70,12 @@ func Update(w http.ResponseWriter, r *http.Request) {
 		query.SetName(input.Name)
 	}
 
-	query.Save(r.Context())
+	_, err := query.Save(r.Context())
+
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 }
 
 func Delete(w http.ResponseWriter, r *http.Request) {
@@ -81,35 +86,39 @@ func Delete(w http.ResponseWriter, r *http.Request) {
 
 	parsedID, _ := uuid.Parse(input.ListID)
 
-	db.List.Delete().
+	_, err := db.List.Delete().
 		Where(list.ID(parsedID)).
 		Exec(r.Context())
+
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 }
 
 func AddUser(w http.ResponseWriter, r *http.Request) {
 	db := database.DBManager()
 	var input BodyAddUser
+
+	render.DecodeJSON(r.Body, &input)
+
 	parsedUserID, _ := uuid.Parse(input.UserID)
 	parsedListID, _ := uuid.Parse(input.ListID)
-	user, _ := db.User.Query().Where(user.ID(parsedUserID)).First(r.Context())
 
-	db.List.
+	query := db.List.
 		Update().
-		Where(list.ID(parsedListID)).
-		AddUsers(user).
-		Save(r.Context())
-}
+		Where(list.ID(parsedListID))
 
-func RemoveUser(w http.ResponseWriter, r *http.Request) {
-	db := database.DBManager()
-	var input BodyRemoveUser
-	parsedUserID, _ := uuid.Parse(input.UserID)
-	parsedListID, _ := uuid.Parse(input.ListID)
-	user, _ := db.User.Query().Where(user.ID(parsedUserID)).First(r.Context())
+	if input.IsAdding {
+		query.AddUserIDs(parsedUserID)
+	} else {
+		query.RemoveUserIDs(parsedUserID)
+	}
 
-	db.List.
-		Update().
-		Where(list.ID(parsedListID)).
-		RemoveUsers(user).
-		Save(r.Context())
+	_, err := query.Save(r.Context())
+
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 }

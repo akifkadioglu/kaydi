@@ -3,6 +3,7 @@ package route
 import (
 	"github.com/akifkadioglu/kaydi/pkg/home"
 	"github.com/akifkadioglu/kaydi/pkg/list"
+	"github.com/akifkadioglu/kaydi/pkg/task"
 	"github.com/akifkadioglu/kaydi/utils"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/jwtauth/v5"
@@ -16,16 +17,29 @@ func private(r chi.Router) {
 
 		r.Route("/private", func(r chi.Router) {
 			r.Get("/", home.Home)
-			r.Route("/lists", func(r chi.Router) {
 
-				r.Get("/", list.Lists)
+			r.Route("/list", func(r chi.Router) {
+
 				r.Post("/", list.Create)
-				r.Delete("/{id}", list.Delete)
-				r.Put("/{id}", list.Update)
+				r.Get("/", list.Lists)
+				r.Delete("/", list.Delete)
+				r.Put("/", list.Update)
 
 				r.Route("/user", func(r chi.Router) {
 					r.Post("/", list.AddUser)
-					r.Delete("/", list.RemoveUser)
+				})
+
+			})
+
+			r.Route("/task", func(r chi.Router) {
+
+				r.Post("/", task.Create)
+				r.Get("/{list_id}", task.Tasks)
+				r.Delete("/", task.Delete)
+				r.Put("/", task.Update)
+
+				r.Route("/user", func(r chi.Router) {
+					r.Post("/", task.Completed)
 				})
 
 			})
