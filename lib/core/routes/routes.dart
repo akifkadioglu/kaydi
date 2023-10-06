@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kaydi_mobile/UI/CreateList/view.dart';
 import 'package:kaydi_mobile/UI/Home/view.dart';
 import 'package:kaydi_mobile/UI/Login/view.dart';
 import 'package:kaydi_mobile/UI/Unknown/unknown.dart';
@@ -20,6 +21,14 @@ get appRoutes => [
         RouteName.HOME,
         const HomeView(),
       ),
+      buildRoute(
+        RouteName.CREATE,
+        const CreateListView(),
+      ),
+      buildRoute(
+        RouteName.ACCOUNT,
+        const HomeView(),
+      ),
     ];
 
 GetPage<dynamic> buildRoute(
@@ -36,7 +45,7 @@ GetPage<dynamic> buildRoute(
     page: () => page,
     children: children ?? [],
     middlewares: [MyMiddelware()],
-    transition: Transition.cupertino,
+    transition: Transition.rightToLeft,
     transitionDuration: Duration(milliseconds: 400),
   );
 }

@@ -3,6 +3,7 @@ import 'package:kaydi_mobile/UI/Components/AppBar.dart';
 import 'package:kaydi_mobile/UI/Login/controller.dart';
 import 'package:kaydi_mobile/core/base/state.dart';
 import 'package:kaydi_mobile/core/constants/app.dart';
+import 'package:kaydi_mobile/core/constants/components.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class LoginView extends StatefulWidget {
@@ -17,7 +18,7 @@ class _LoginViewState extends BaseState<LoginView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(50),
+        preferredSize: Size.fromHeight(ComponentsConstants.AppbarHeight),
         child: K_Appbar(
           AppText: AppConstant.AppName,
         ),

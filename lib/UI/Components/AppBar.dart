@@ -3,8 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:kaydi_mobile/core/constants/texts.dart';
 
 class K_Appbar extends StatelessWidget {
-  const K_Appbar({super.key, required this.AppText});
+  const K_Appbar({super.key, required this.AppText, this.action});
   final String AppText;
+  final Widget? action;
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +17,9 @@ class K_Appbar extends StatelessWidget {
         style: GoogleFonts.getFont(TextConstants.AppbarText),
       ),
       backgroundColor: Colors.transparent,
+      actions: [
+        action ?? SizedBox(),
+      ],
     );
   }
 }
