@@ -7,6 +7,8 @@ import 'package:kaydi_mobile/UI/Home/view_controller.dart';
 import 'package:kaydi_mobile/core/base/state.dart';
 import 'package:kaydi_mobile/core/constants/app.dart';
 import 'package:kaydi_mobile/core/constants/components.dart';
+import 'package:kaydi_mobile/core/routes/manager.dart';
+import 'package:kaydi_mobile/core/routes/route_names.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class HomeView extends StatefulWidget {
@@ -32,7 +34,14 @@ class _HomeViewState extends BaseState<HomeView> {
         itemCount: 15,
         itemBuilder: (context, index) => ListTile(
           title: Text(index.toString()),
-          onTap: () {},
+          onTap: () {
+            RouteManager.normalRoute(
+              RouteName.TODOLIST,
+              parameters: {
+                "id": index.toString(),
+              },
+            );
+          },
         ),
       ),
       bottomNavigationBar: Obx(() => Padding(

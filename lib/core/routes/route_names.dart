@@ -6,8 +6,9 @@ class RouteName {
   //home
   static const HOME = '/home';
 
-  //create
+  //list
   static const CREATE = "/create";
+  static const TODOLIST = "/list";
 
   //account
   static const ACCOUNT = "/account";

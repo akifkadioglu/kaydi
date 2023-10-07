@@ -6,6 +6,10 @@ class RouteManager {
     Get.toNamed(path, parameters: parameters);
   }
 
+  static void back({Map<String, String>? parameters}) {
+    Get.back();
+  }
+
   static void goRouteAndRemoveBefore(String path, {Map<String, String>? parameters}) {
     Get.offAllNamed(path, parameters: parameters);
   }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kaydi_mobile/UI/Account/view.dart';
 import 'package:kaydi_mobile/UI/CreateList/view.dart';
 import 'package:kaydi_mobile/UI/Home/view.dart';
+import 'package:kaydi_mobile/UI/List/view.dart';
 import 'package:kaydi_mobile/UI/Login/view.dart';
 import 'package:kaydi_mobile/UI/Unknown/unknown.dart';
 import 'package:kaydi_mobile/core/routes/route_names.dart';
@@ -26,8 +28,12 @@ get appRoutes => [
         const CreateListView(),
       ),
       buildRoute(
+        RouteName.TODOLIST,
+        const TodoListView(),
+      ),
+      buildRoute(
         RouteName.ACCOUNT,
-        const HomeView(),
+        const AccountView(),
       ),
     ];
 
