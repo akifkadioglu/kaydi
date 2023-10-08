@@ -6,7 +6,7 @@ void route(index) {
     case 0:
       break;
     case 1:
-      RouteManager.normalRoute(RouteName.CREATE);
+      RouteManager.normalRoute(RouteName.CREATE_LIST);
       break;
     case 2:
       RouteManager.normalRoute(RouteName.ACCOUNT);

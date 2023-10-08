@@ -56,7 +56,10 @@ class _HomeViewState extends BaseState<HomeView> {
               isFloating: true,
               items: [
                 CustomNavigationBarItem(
-                  icon: Icon(MdiIcons.home),
+                  icon: Icon(
+                    MdiIcons.home,
+                    color: Color.fromARGB(255, 40, 194, 255),
+                  ),
                 ),
                 CustomNavigationBarItem(
                   icon: Icon(MdiIcons.creationOutline),

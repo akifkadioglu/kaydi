@@ -1,21 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kaydi_mobile/UI/Components/AppBar.dart';
-import 'package:kaydi_mobile/UI/CreateList/view_controller.dart';
+import 'package:kaydi_mobile/UI/List/CreateTask/view_controller.dart';
 import 'package:kaydi_mobile/core/base/state.dart';
 import 'package:kaydi_mobile/core/constants/components.dart';
 import 'package:kaydi_mobile/core/routes/manager.dart';
 
-class CreateListView extends StatefulWidget {
-  const CreateListView({super.key});
+class CreateTaskView extends StatefulWidget {
+  const CreateTaskView({super.key});
 
   @override
-  BaseState<CreateListView> createState() => _CreateListViewState();
+  BaseState<CreateTaskView> createState() => _CreateTaskViewState();
 }
 
-class _CreateListViewState extends BaseState<CreateListView> {
-  CreateListViewController c = Get.put(CreateListViewController());
-  static const int TitleMaxLength = 100;
+class _CreateTaskViewState extends BaseState<CreateTaskView> {
+  static const int TitleMaxLength = 500;
+  CreateTaskViewController c = Get.put(CreateTaskViewController());
+  String id = '';
+  @override
+  void initState() {
+    super.initState();
+    id = Get.parameters['id'].toString();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +29,7 @@ class _CreateListViewState extends BaseState<CreateListView> {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(ComponentsConstants.AppbarHeight),
         child: K_Appbar(
-          AppText: 'New List',
+          AppText: id,
         ),
       ),
       body: SingleChildScrollView(
@@ -33,22 +39,24 @@ class _CreateListViewState extends BaseState<CreateListView> {
             () {
               return Column(
                 children: [
-                  TextField(
+                  TextFormField(
                     autofocus: true,
                     keyboardType: TextInputType.name,
                     maxLength: TitleMaxLength,
-                    textInputAction: TextInputAction.done,
+                    textInputAction: TextInputAction.newline,
                     smartDashesType: SmartDashesType.enabled,
                     onChanged: c.setCounter,
+                    maxLines: 5,
                     textCapitalization: TextCapitalization.sentences,
                     decoration: InputDecoration(
+                      isDense: true,
                       helperMaxLines: 2,
                       filled: true,
-                      isDense: true,
-                      hintText: 'Listenin Başlığı',
-                      helperText: 'Listenin Başlığı zorunlu bir alandır ve katılımcılar bu başlığı görür.',
+                      hintText: 'Yeni Görev',
+                      helperText: id +
+                          '\'e yeni görev ekliyorsunuz. Bu işlemden sonra bu listedeki herkese bildirim gidecektir.',
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(50),
+                        borderRadius: BorderRadius.circular(5),
                         borderSide: BorderSide.none,
                       ),
                       counter: SizedBox(

@@ -26,7 +26,7 @@ class _AccountViewState extends BaseState<AccountView> {
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: dynamicWidth(0.05)),
+          padding: EdgeInsets.symmetric(horizontal: dynamicWidth(0.05), vertical: 20),
           child: Column(
             children: [
               TextFormField(
@@ -42,6 +42,7 @@ class _AccountViewState extends BaseState<AccountView> {
                   ),
                 ),
               ),
+              Divider(),
               TextFormField(
                 initialValue: 'akif',
                 readOnly: true,
@@ -55,6 +56,17 @@ class _AccountViewState extends BaseState<AccountView> {
                   ),
                 ),
               ),
+              Divider(),
+              ListTile(
+                title: Text('Liste istekleri'),
+                trailing: Switch(
+                  activeColor: Color.fromARGB(255, 40, 194, 255),
+                  value: true,
+                  onChanged: (value) {},
+                ),
+                onTap: () {},
+              ),
+              Divider(),
               ListTile(
                 leading: Icon(MdiIcons.logout),
                 title: Text('Çıkış Yap'),
@@ -62,14 +74,7 @@ class _AccountViewState extends BaseState<AccountView> {
                   RouteManager.goRouteAndRemoveBefore(RouteName.LOGIN);
                 },
               ),
-            ]
-                .map(
-                  (e) => Padding(
-                    padding: EdgeInsets.symmetric(vertical: 20),
-                    child: e,
-                  ),
-                )
-                .toList(),
+            ],
           ),
         ),
       ),
