@@ -4,6 +4,7 @@ import 'package:kaydi_mobile/UI/Components/AppBar.dart';
 import 'package:kaydi_mobile/UI/List/CreateTask/view_controller.dart';
 import 'package:kaydi_mobile/core/base/state.dart';
 import 'package:kaydi_mobile/core/constants/components.dart';
+import 'package:kaydi_mobile/core/constants/parameters.dart';
 import 'package:kaydi_mobile/core/routes/manager.dart';
 
 class CreateTaskView extends StatefulWidget {
@@ -20,7 +21,7 @@ class _CreateTaskViewState extends BaseState<CreateTaskView> {
   @override
   void initState() {
     super.initState();
-    id = Get.parameters['id'].toString();
+    id = Get.parameters[Parameter.ID].toString();
   }
 
   @override
@@ -45,7 +46,7 @@ class _CreateTaskViewState extends BaseState<CreateTaskView> {
                     maxLength: TitleMaxLength,
                     textInputAction: TextInputAction.newline,
                     smartDashesType: SmartDashesType.enabled,
-                    onChanged: c.setCounter,
+                    onChanged: c.setTaskName,
                     maxLines: 5,
                     textCapitalization: TextCapitalization.sentences,
                     decoration: InputDecoration(
@@ -63,9 +64,9 @@ class _CreateTaskViewState extends BaseState<CreateTaskView> {
                         height: 20,
                         width: 20,
                         child: CircularProgressIndicator(
-                          color: c.counter.value.length < TitleMaxLength ? null : Colors.amber,
+                          color: c.taskName.value.length < TitleMaxLength ? null : Colors.amber,
                           strokeWidth: 2,
-                          value: (1 / TitleMaxLength) * c.counter.value.length,
+                          value: (1 / TitleMaxLength) * c.taskName.value.length,
                         ),
                       ),
                     ),

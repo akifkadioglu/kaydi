@@ -4,6 +4,7 @@ import 'package:kaydi_mobile/UI/Components/AppBar.dart';
 import 'package:kaydi_mobile/UI/List/controller.dart';
 import 'package:kaydi_mobile/core/base/state.dart';
 import 'package:kaydi_mobile/core/constants/components.dart';
+import 'package:kaydi_mobile/core/constants/parameters.dart';
 import 'package:kaydi_mobile/core/routes/manager.dart';
 import 'package:kaydi_mobile/core/routes/route_names.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -21,7 +22,7 @@ class _TodoListViewState extends BaseState<TodoListView> {
   @override
   void initState() {
     super.initState();
-    id = Get.parameters['id'].toString();
+    id = Get.parameters[Parameter.ID].toString();
   }
 
   @override
@@ -37,7 +38,7 @@ class _TodoListViewState extends BaseState<TodoListView> {
             onPressed: () {
               RouteManager.normalRoute(
                 RouteName.LIST_SETTINGS,
-                parameters: {'id': id},
+                parameters: {Parameter.ID: id},
               );
             },
           ),
@@ -65,7 +66,7 @@ class _TodoListViewState extends BaseState<TodoListView> {
         onPressed: () {
           RouteManager.normalRoute(
             RouteName.CREATE_TASK,
-            parameters: {'id': id},
+            parameters: {Parameter.ID: id},
           );
         },
         backgroundColor: const Color.fromARGB(255, 18, 84, 110),

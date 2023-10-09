@@ -39,7 +39,7 @@ class _CreateListViewState extends BaseState<CreateListView> {
                     maxLength: TitleMaxLength,
                     textInputAction: TextInputAction.done,
                     smartDashesType: SmartDashesType.enabled,
-                    onChanged: c.setCounter,
+                    onChanged: c.setListName,
                     textCapitalization: TextCapitalization.sentences,
                     decoration: InputDecoration(
                       helperMaxLines: 2,
@@ -55,9 +55,9 @@ class _CreateListViewState extends BaseState<CreateListView> {
                         height: 20,
                         width: 20,
                         child: CircularProgressIndicator(
-                          color: c.counter.value.length < TitleMaxLength ? null : Colors.amber,
+                          color: c.listName.value.length < TitleMaxLength ? null : Colors.amber,
                           strokeWidth: 2,
-                          value: (1 / TitleMaxLength) * c.counter.value.length,
+                          value: (1 / TitleMaxLength) * c.listName.value.length,
                         ),
                       ),
                     ),

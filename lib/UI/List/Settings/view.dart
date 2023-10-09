@@ -4,6 +4,7 @@ import 'package:kaydi_mobile/UI/Components/AppBar.dart';
 import 'package:kaydi_mobile/UI/List/Settings/view_controller.dart';
 import 'package:kaydi_mobile/core/base/state.dart';
 import 'package:kaydi_mobile/core/constants/components.dart';
+import 'package:kaydi_mobile/core/constants/parameters.dart';
 import 'package:kaydi_mobile/core/routes/manager.dart';
 import 'package:kaydi_mobile/core/routes/route_names.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -22,7 +23,7 @@ class _TodoListSettingsView extends BaseState<TodoListSettingsView> {
   @override
   void initState() {
     super.initState();
-    id = Get.parameters['id'].toString();
+    id = Get.parameters[Parameter.ID].toString();
   }
 
   @override
@@ -46,7 +47,7 @@ class _TodoListSettingsView extends BaseState<TodoListSettingsView> {
                 onTap: () {
                   RouteManager.normalRoute(
                     RouteName.LIST_SEARCH,
-                    parameters: {'id': id},
+                    parameters: {Parameter.ID: id},
                   );
                 },
                 decoration: InputDecoration(

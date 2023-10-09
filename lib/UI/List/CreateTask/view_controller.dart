@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
 class CreateTaskViewController extends GetxController {
-  var counter = ''.obs;
+  var taskName = ''.obs;
 
-  void setCounter(String v) => counter.value = v;
+  void setTaskName(String v) => taskName.value = v;
 }

@@ -40,6 +40,10 @@ dependencies:
   google_fonts: ^6.1.0
   material_design_icons_flutter: ^7.0.7296
   custom_navigation_bar: ^0.8.2
+  bottom_sheet: ^4.0.0
+  country_flags: ^2.1.1
+  flutter_localizations:
+    sdk: flutter
 
 dev_dependencies:
   flutter_test:

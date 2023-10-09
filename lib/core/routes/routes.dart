@@ -21,10 +21,12 @@ get appRoutes => [
       buildRoute(
         RouteName.LOGIN,
         const LoginView(),
+        transition: Transition.fade,
       ),
       buildRoute(
         RouteName.HOME,
         const HomeView(),
+        transition: Transition.fade,
       ),
 
       //List

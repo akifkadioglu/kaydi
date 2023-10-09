@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
 class CreateListViewController extends GetxController {
-  var counter = ''.obs;
+  var listName = ''.obs;
 
-  void setCounter(String v) => counter.value = v;
+  void setListName(String v) => listName.value = v;
 }
