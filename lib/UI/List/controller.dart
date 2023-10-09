@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kaydi_mobile/core/language/initialize.dart';
 
 Future<dynamic> deleteTask(BuildContext context, double width) {
   return showDialog(
@@ -12,7 +13,7 @@ Future<dynamic> deleteTask(BuildContext context, double width) {
         content: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Görev silinsin mi?'),
+            Text(translate(IKey.DELETE_TASK)),
           ],
         ),
         actions: [
@@ -28,7 +29,7 @@ Future<dynamic> deleteTask(BuildContext context, double width) {
                   onPressed: () {
                     Get.back();
                   },
-                  child: Text('İptal'),
+                  child: Text(translate(IKey.CLOSE)),
                 ),
               ),
               SizedBox(
@@ -39,7 +40,7 @@ Future<dynamic> deleteTask(BuildContext context, double width) {
                     elevation: 0,
                   ),
                   onPressed: () {},
-                  child: Text('Sil'),
+                  child: Text(translate(IKey.DELETE)),
                 ),
               ),
             ],
@@ -74,7 +75,7 @@ Future<dynamic> showTask(BuildContext context, double width, String task) {
                   onPressed: () {
                     Get.back();
                   },
-                  child: Text('Kapat'),
+                  child: Text(translate(IKey.CLOSE)),
                 ),
               ),
               SizedBox(
@@ -85,7 +86,7 @@ Future<dynamic> showTask(BuildContext context, double width, String task) {
                     elevation: 0,
                   ),
                   onPressed: () {},
-                  child: Text('İşaretle'),
+                  child: Text(translate(IKey.CHECK)),
                 ),
               ),
             ],

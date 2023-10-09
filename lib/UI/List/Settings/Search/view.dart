@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kaydi_mobile/UI/List/Settings/Search/view_controller.dart';
 import 'package:kaydi_mobile/core/base/state.dart';
+import 'package:kaydi_mobile/core/language/initialize.dart';
 
 class TodoListSearchView extends StatefulWidget {
   const TodoListSearchView({super.key});
@@ -28,7 +29,7 @@ class _TodoListSearchViewState extends BaseState<TodoListSearchView> {
             decoration: InputDecoration(
               contentPadding: EdgeInsets.symmetric(horizontal: 20),
               filled: true,
-              hintText: 'E-mail ara',
+              hintText: translate(IKey.SEARCH_EMAIL),
               prefixIcon: Icon(Icons.search),
               prefixIconColor: Colors.white,
               border: OutlineInputBorder(

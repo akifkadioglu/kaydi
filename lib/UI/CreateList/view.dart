@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kaydi_mobile/UI/Components/AppBar.dart';
+import 'package:kaydi_mobile/UI/Components/cancel_create_bottom_bar.dart';
 import 'package:kaydi_mobile/UI/CreateList/view_controller.dart';
 import 'package:kaydi_mobile/core/base/state.dart';
 import 'package:kaydi_mobile/core/constants/components.dart';
-import 'package:kaydi_mobile/core/routes/manager.dart';
+import 'package:kaydi_mobile/core/language/initialize.dart';
 
 class CreateListView extends StatefulWidget {
   const CreateListView({super.key});
@@ -23,7 +24,7 @@ class _CreateListViewState extends BaseState<CreateListView> {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(ComponentsConstants.AppbarHeight),
         child: K_Appbar(
-          AppText: 'New List',
+          AppText: translate(IKey.NEW_LIST),
         ),
       ),
       body: SingleChildScrollView(
@@ -45,8 +46,8 @@ class _CreateListViewState extends BaseState<CreateListView> {
                       helperMaxLines: 2,
                       filled: true,
                       isDense: true,
-                      hintText: 'Listenin Başlığı',
-                      helperText: 'Listenin Başlığı zorunlu bir alandır ve katılımcılar bu başlığı görür.',
+                      hintText: translate(IKey.TITLE_OF_LIST),
+                      helperText: translate(IKey.TITLE_OF_LIST_DESCRIPTION),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(50),
                         borderSide: BorderSide.none,
@@ -68,45 +69,8 @@ class _CreateListViewState extends BaseState<CreateListView> {
           ),
         ),
       ),
-      bottomSheet: BottomAppBar(
-        height: 50,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            SizedBox(
-              width: dynamicWidth(0.45),
-              child: FilledButton(
-                style: FilledButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  elevation: 0,
-                  backgroundColor: Colors.transparent,
-                ),
-                onPressed: () {
-                  RouteManager.back();
-                },
-                child: Text(
-                  'İptal',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
-            SizedBox(
-              width: dynamicWidth(0.45),
-              child: FilledButton(
-                style: FilledButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  elevation: 0,
-                  backgroundColor: Colors.transparent,
-                ),
-                onPressed: () {},
-                child: Text(
-                  'Oluştur',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
-          ],
-        ),
+      bottomSheet: CancelCreateBottomBar(
+        createFunc: () {},
       ),
     );
   }

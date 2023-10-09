@@ -5,6 +5,7 @@ import 'package:kaydi_mobile/UI/List/Settings/view_controller.dart';
 import 'package:kaydi_mobile/core/base/state.dart';
 import 'package:kaydi_mobile/core/constants/components.dart';
 import 'package:kaydi_mobile/core/constants/parameters.dart';
+import 'package:kaydi_mobile/core/language/initialize.dart';
 import 'package:kaydi_mobile/core/routes/manager.dart';
 import 'package:kaydi_mobile/core/routes/route_names.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -54,8 +55,8 @@ class _TodoListSettingsView extends BaseState<TodoListSettingsView> {
                   isDense: true,
                   helperMaxLines: 2,
                   filled: true,
-                  hintText: 'Kişi ekle',
-                  helperText: 'Listeye eklemek istediğiniz kişinin E-mail adresini aratın.',
+                  hintText: translate(IKey.ADD_SOMEONE),
+                  helperText: translate(IKey.ADD_SOMEONE_DESCRIPTION),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(50),
                     borderSide: BorderSide.none,
@@ -64,7 +65,7 @@ class _TodoListSettingsView extends BaseState<TodoListSettingsView> {
               ),
               Divider(),
               ListTile(
-                title: Text('Bildirimler'),
+                title: Text(translate(IKey.NOTIFICATIONS)),
                 trailing: Switch(
                   activeColor: Color.fromARGB(255, 40, 194, 255),
                   value: true,
@@ -87,12 +88,12 @@ class _TodoListSettingsView extends BaseState<TodoListSettingsView> {
                             ],
                           ),
                   ),
-                  title: Text('Buluta Taşı'),
+                  title: Text(translate(IKey.MOVE_TO_CLOUD)),
                   onTap: () {
                     c.setLoading;
                   },
                   subtitle: Text(
-                    'Listenizi buluta taşıyarak istediğiniz kişileri listenize ekleyebilirsiniz.',
+                    translate(IKey.MOVE_TO_CLOUD_DESCRIPTION),
                     style: TextStyle(
                       fontSize: 12,
                     ),
@@ -107,12 +108,12 @@ class _TodoListSettingsView extends BaseState<TodoListSettingsView> {
                     Icon(MdiIcons.logout),
                   ],
                 ),
-                title: Text('Ayrıl'),
+                title: Text(translate(IKey.LEAVE)),
                 onTap: () {
                   RouteManager.goRouteAndRemoveBefore(RouteName.HOME);
                 },
                 subtitle: Text(
-                  'Listedeki kullanıcılara bildirim gidecektir.',
+                  translate(IKey.LEAVE_DESCRIPTION),
                   style: TextStyle(
                     fontSize: 12,
                   ),
