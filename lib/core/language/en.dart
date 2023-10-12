@@ -24,6 +24,7 @@ Map<String, String> get English => {
       IKey.MOVE_TO_CLOUD.name: 'Move to cloud',
       IKey.MOVE_TO_CLOUD_DESCRIPTION.name:
           'You can add the people you want to your list by moving your list to the cloud.',
+      IKey.MOVE_TO_CLOUD_DESCRIPTION_2.name: 'It\'s not available now',
       IKey.LEAVE.name: 'Leave',
       IKey.LEAVE_DESCRIPTION.name: 'Notification will be sent to users in the list.',
       IKey.SEARCH_EMAIL.name: 'Search E-mail',
@@ -31,4 +32,6 @@ Map<String, String> get English => {
       IKey.CLOSE.name: 'Close',
       IKey.DELETE.name: 'Delete',
       IKey.CHECK.name: 'Check',
+      IKey.UNCHECK.name: 'Uncheck',
+      
     };

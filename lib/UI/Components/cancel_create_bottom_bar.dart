@@ -14,44 +14,47 @@ class _CancelCreateBottomBarState extends BaseState<CancelCreateBottomBar> {
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
-        height: 50,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            SizedBox(
-              width: dynamicWidth(0.45),
-              child: FilledButton(
-                style: FilledButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  elevation: 0,
-                  backgroundColor: Colors.transparent,
-                ),
-                onPressed: () {
-                  RouteManager.back();
-                },
-                child: Text(
-                  translate(IKey.CANCEL),
-                  style: TextStyle(color: Colors.white),
-                ),
+      height: 50,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          SizedBox(
+            width: dynamicWidth(0.45),
+            child: FilledButton(
+              style: FilledButton.styleFrom(
+                foregroundColor: Colors.white,
+                elevation: 0,
+                backgroundColor: Colors.transparent,
+              ),
+              onPressed: () {
+                RouteManager.back();
+              },
+              child: Text(
+                translate(IKey.CANCEL),
+                style: TextStyle(color: Colors.white),
               ),
             ),
-            SizedBox(
-              width: dynamicWidth(0.45),
-              child: FilledButton(
-                style: FilledButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  elevation: 0,
-                  backgroundColor: Colors.transparent,
-                ),
-                onPressed: () {},
-                child: Text(
-                  translate(IKey.CREATE),
-                  style: TextStyle(color: Colors.white),
-                ),
+          ),
+          SizedBox(
+            width: dynamicWidth(0.45),
+            child: FilledButton(
+              style: FilledButton.styleFrom(
+                foregroundColor: Colors.white,
+                elevation: 0,
+                backgroundColor: Colors.transparent,
+              ),
+              onPressed: () {
+                widget.createFunc();
+                RouteManager.back();
+              },
+              child: Text(
+                translate(IKey.CREATE),
+                style: TextStyle(color: Colors.white),
               ),
             ),
-          ],
-        ),
-      );
+          ),
+        ],
+      ),
+    );
   }
 }

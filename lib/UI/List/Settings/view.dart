@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kaydi_mobile/UI/Components/AppBar.dart';
+import 'package:kaydi_mobile/UI/List/Settings/controller.dart';
 import 'package:kaydi_mobile/UI/List/Settings/view_controller.dart';
 import 'package:kaydi_mobile/core/base/state.dart';
 import 'package:kaydi_mobile/core/constants/components.dart';
@@ -19,12 +20,14 @@ class TodoListSettingsView extends StatefulWidget {
 
 class _TodoListSettingsView extends BaseState<TodoListSettingsView> {
   String id = '';
+  String listName = '';
   TodoListSettingsViewController c = Get.put(TodoListSettingsViewController());
 
   @override
   void initState() {
     super.initState();
     id = Get.parameters[Parameter.ID].toString();
+    listName = Get.parameters[Parameter.LIST_NAME].toString();
   }
 
   @override
@@ -32,7 +35,7 @@ class _TodoListSettingsView extends BaseState<TodoListSettingsView> {
     return Scaffold(
       appBar: PreferredSize(
         child: K_Appbar(
-          AppText: id,
+          AppText: listName,
         ),
         preferredSize: Size.fromHeight(ComponentsConstants.AppbarHeight),
       ),
@@ -45,18 +48,21 @@ class _TodoListSettingsView extends BaseState<TodoListSettingsView> {
               TextField(
                 keyboardType: TextInputType.name,
                 readOnly: true,
-                onTap: () {
+                onTap:
+                    null /* () {
                   RouteManager.normalRoute(
                     RouteName.LIST_SEARCH,
                     parameters: {Parameter.ID: id},
                   );
-                },
+                } */
+                ,
                 decoration: InputDecoration(
                   isDense: true,
                   helperMaxLines: 2,
                   filled: true,
                   hintText: translate(IKey.ADD_SOMEONE),
-                  helperText: translate(IKey.ADD_SOMEONE_DESCRIPTION),
+                  helperText:
+                      translate(IKey.ADD_SOMEONE_DESCRIPTION) + " " + translate(IKey.MOVE_TO_CLOUD_DESCRIPTION_2),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(50),
                     borderSide: BorderSide.none,
@@ -89,14 +95,26 @@ class _TodoListSettingsView extends BaseState<TodoListSettingsView> {
                           ),
                   ),
                   title: Text(translate(IKey.MOVE_TO_CLOUD)),
-                  onTap: () {
+                  onTap: null /*  () {
                     c.setLoading;
-                  },
-                  subtitle: Text(
-                    translate(IKey.MOVE_TO_CLOUD_DESCRIPTION),
-                    style: TextStyle(
-                      fontSize: 12,
-                    ),
+                  } */
+                  ,
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        translate(IKey.MOVE_TO_CLOUD_DESCRIPTION),
+                        style: TextStyle(
+                          fontSize: 12,
+                        ),
+                      ),
+                      Text(
+                        translate(IKey.MOVE_TO_CLOUD_DESCRIPTION_2),
+                        style: TextStyle(
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -110,6 +128,7 @@ class _TodoListSettingsView extends BaseState<TodoListSettingsView> {
                 ),
                 title: Text(translate(IKey.LEAVE)),
                 onTap: () {
+                  leaveFromList(id);
                   RouteManager.goRouteAndRemoveBefore(RouteName.HOME);
                 },
                 subtitle: Text(

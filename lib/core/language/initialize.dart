@@ -1,13 +1,25 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:kaydi_mobile/core/language/en.dart';
 import 'package:flutter/material.dart';
 import 'package:kaydi_mobile/core/language/tr.dart';
+import 'package:kaydi_mobile/core/models/app.dart';
+import 'package:kaydi_mobile/core/storage/manager.dart';
 
 String translate(IKey? key) {
   return key == null ? '' : key.name.tr;
 }
 
 void ChangeLanguage(Locale locale) {
+  // StorageManager.instance.setData(SKey.APP, )
+
+  var app = StorageManager.instance.getData(SKey.APP);
+  var model = appModelFromJson(app);
+  model.language = locale.toString();
+
+  StorageManager.instance.setData(SKey.APP, json.encode(model));
+
   Get.updateLocale(locale);
 }
 
@@ -47,6 +59,7 @@ enum IKey {
   NOTIFICATIONS,
   MOVE_TO_CLOUD,
   MOVE_TO_CLOUD_DESCRIPTION,
+  MOVE_TO_CLOUD_DESCRIPTION_2,
   LEAVE,
   LEAVE_DESCRIPTION,
   SEARCH_EMAIL,
@@ -54,4 +67,5 @@ enum IKey {
   CLOSE,
   DELETE,
   CHECK,
+  UNCHECK,
 }

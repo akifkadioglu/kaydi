@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kaydi_mobile/UI/Components/AppBar.dart';
 import 'package:kaydi_mobile/UI/Components/cancel_create_bottom_bar.dart';
+import 'package:kaydi_mobile/UI/CreateList/controller.dart';
 import 'package:kaydi_mobile/UI/CreateList/view_controller.dart';
 import 'package:kaydi_mobile/core/base/state.dart';
 import 'package:kaydi_mobile/core/constants/components.dart';
@@ -70,7 +71,7 @@ class _CreateListViewState extends BaseState<CreateListView> {
         ),
       ),
       bottomSheet: CancelCreateBottomBar(
-        createFunc: () {},
+        createFunc: () => createList(c.listName.value),
       ),
     );
   }

@@ -24,6 +24,7 @@ Map<String, String> get Turkish => {
       IKey.MOVE_TO_CLOUD.name: 'Buluta taşı',
       IKey.MOVE_TO_CLOUD_DESCRIPTION.name:
           'Listenizi buluta taşıyarak istediğiniz kişileri listenize ekleyebilirsiniz.',
+      IKey.MOVE_TO_CLOUD_DESCRIPTION_2.name: 'Şu an aktif değil',
       IKey.LEAVE.name: 'Ayrıl',
       IKey.LEAVE_DESCRIPTION.name: 'Listedeki kullanıcılara bildirim gönderilecek.',
       IKey.SEARCH_EMAIL.name: 'E-posta ara',
@@ -31,4 +32,5 @@ Map<String, String> get Turkish => {
       IKey.CLOSE.name: 'Kapat',
       IKey.DELETE.name: 'Sil',
       IKey.CHECK.name: 'İşaretle',
+      IKey.UNCHECK.name: 'İşareti kaldır',
     };
