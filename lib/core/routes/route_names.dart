@@ -1,6 +1,7 @@
 class RouteName {
   //user
   static const UNKNOWN = '/unknown';
+  static const LOADING = '/loading';
   static const LOGIN = '/login';
 
   //home

@@ -1,10 +1,15 @@
 import 'package:bottom_sheet/bottom_sheet.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kaydi_mobile/UI/Login/controller.dart';
+import 'package:kaydi_mobile/UI/Login/view_controller.dart';
 import 'package:kaydi_mobile/core/base/state.dart';
 import 'package:kaydi_mobile/core/base/view.dart';
+import 'package:kaydi_mobile/core/constants/texts.dart';
 import 'package:kaydi_mobile/core/language/initialize.dart';
+import 'package:kaydi_mobile/core/routes/manager.dart';
+import 'package:kaydi_mobile/core/routes/route_names.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class LoginView extends StatefulWidget {
@@ -17,7 +22,7 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends BaseState<LoginView> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _opacityAnimation;
-
+  LoginViewController c = Get.put(LoginViewController());
   @override
   void initState() {
     super.initState();
@@ -100,12 +105,20 @@ class _LoginViewState extends BaseState<LoginView> with SingleTickerProviderStat
                       ],
                     ),
                   ),
-                  FilledButton(
-                    onPressed: loginWithGoogle,
-                    child: Text(
-                      translate(IKey.CONTINUE_OFFLINE),
-                    ),
-                  )
+                  Obx(
+                    () => c.isLoading.value
+                        ? CircularProgressIndicator()
+                        : FilledButton(
+                            onPressed: c.isLoading.isFalse
+                                ? () {
+                                    RouteManager.goRouteAndRemoveBefore(RouteName.HOME);
+                                  }
+                                : null,
+                            child: Text(
+                              translate(IKey.CONTINUE_OFFLINE),
+                            ),
+                          ),
+                  ),
                 ],
               ),
             ),
@@ -135,7 +148,7 @@ class _LoginViewState extends BaseState<LoginView> with SingleTickerProviderStat
           ),
           child: Text(
             translate(IKey.WELCOME_TO_KAYDI),
-            style: GoogleFonts.unbounded(fontSize: 30),
+            style: GoogleFonts.getFont(TextConstants.WelcomeText, fontSize: 30),
           ),
         ),
       ),
@@ -146,24 +159,28 @@ class _LoginViewState extends BaseState<LoginView> with SingleTickerProviderStat
     return SizedBox(
       height: 60,
       width: dynamicWidth(0.8),
-      child: ElevatedButton.icon(
-        style: ElevatedButton.styleFrom(
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          shadowColor: Colors.transparent,
-          side: BorderSide(
-            color: themeData.dividerColor,
+      child: Obx(
+        () => ElevatedButton.icon(
+          style: ElevatedButton.styleFrom(
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+            shadowColor: Colors.transparent,
+            side: BorderSide(
+              color: themeData.dividerColor,
+            ),
           ),
+          icon: Icon(MdiIcons.google),
+          label: Text(
+            translate(IKey.CONTINUE_WITH_GOOGLE),
+            style: GoogleFonts.getFont(TextConstants.LoginWithText),
+          ),
+          onPressed: c.isLoading.isFalse
+              ? () {
+                  loginWithGoogle();
+                }
+              : null,
         ),
-        icon: Icon(MdiIcons.google),
-        label: Text(
-          translate(IKey.CONTINUE_WITH_GOOGLE),
-          style: GoogleFonts.ptSans(),
-        ),
-        onPressed: loginWithGoogle,
       ),
     );
   }
-
-  
 }

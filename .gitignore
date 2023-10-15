@@ -42,3 +42,12 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# admob
+/lib/core/ads/service.dart
+
+# key
+key.jks
+
+# google services
+/android/app/google-services.json

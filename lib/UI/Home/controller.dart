@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:kaydi_mobile/core/routes/manager.dart';
 import 'package:kaydi_mobile/core/routes/route_names.dart';
 
@@ -9,7 +10,11 @@ void route(index) {
       RouteManager.normalRoute(RouteName.CREATE_LIST);
       break;
     case 2:
-      RouteManager.normalRoute(RouteName.ACCOUNT);
+      if (FirebaseAuth.instance.currentUser != null) {
+        RouteManager.normalRoute(RouteName.ACCOUNT);
+      } else {
+        RouteManager.goRouteAndRemoveBefore(RouteName.LOGIN);
+      }
       break;
     default:
   }

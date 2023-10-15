@@ -15,6 +15,7 @@ Map<String, String> get English => {
       IKey.EMAIL.name: 'E-mail',
       IKey.NAME.name: 'Name',
       IKey.LIST_REQUESTS.name: 'List requests',
+      IKey.LIST_REQUESTS_DESCRIPTION.name: 'Anyone can add you to a list',
       IKey.LOGOUT.name: 'Log out',
       IKey.NEW_TASK.name: 'New Task',
       IKey.NEW_TASK_DESCRIPTION.name: 'After adding this task, everyone in the list will be notified.',
@@ -22,6 +23,7 @@ Map<String, String> get English => {
       IKey.ADD_SOMEONE_DESCRIPTION.name: 'Search for the e-mail address of the person you want to add to the list.',
       IKey.NOTIFICATIONS.name: 'Notifications',
       IKey.MOVE_TO_CLOUD.name: 'Move to cloud',
+      IKey.IN_CLOUD.name: "In cloud",
       IKey.MOVE_TO_CLOUD_DESCRIPTION.name:
           'You can add the people you want to your list by moving your list to the cloud.',
       IKey.MOVE_TO_CLOUD_DESCRIPTION_2.name: 'It\'s not available now',
@@ -33,5 +35,7 @@ Map<String, String> get English => {
       IKey.DELETE.name: 'Delete',
       IKey.CHECK.name: 'Check',
       IKey.UNCHECK.name: 'Uncheck',
-      
+      IKey.FINISH_LIST_DESCRIPTION.name: 'You finished all the lists, you can go on a vacation 🥳',
+      IKey.FINISH_TASK_DESCRIPTION.name: 'Let\'s create a new task! There is so much to do 🙃',
+      IKey.TOAST_1.name: "First you need to move the list to the cloud",
     };

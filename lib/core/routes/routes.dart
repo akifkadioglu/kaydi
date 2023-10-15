@@ -7,6 +7,7 @@ import 'package:kaydi_mobile/UI/List/CreateTask/view.dart';
 import 'package:kaydi_mobile/UI/List/Settings/Search/view.dart';
 import 'package:kaydi_mobile/UI/List/Settings/view.dart';
 import 'package:kaydi_mobile/UI/List/view.dart';
+import 'package:kaydi_mobile/UI/Loading/view.dart';
 import 'package:kaydi_mobile/UI/Login/view.dart';
 import 'package:kaydi_mobile/UI/Unknown/unknown.dart';
 import 'package:kaydi_mobile/core/routes/route_names.dart';
@@ -19,10 +20,17 @@ get unknownRoute => buildRoute(
 get appRoutes => [
       //Auth
       buildRoute(
+        RouteName.LOADING,
+        const LoadingView(),
+        transition: Transition.fade,
+      ),
+      
+      buildRoute(
         RouteName.LOGIN,
         const LoginView(),
         transition: Transition.fade,
       ),
+
       buildRoute(
         RouteName.HOME,
         const HomeView(),

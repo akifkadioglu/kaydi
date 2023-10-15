@@ -10,6 +10,7 @@ import 'package:kaydi_mobile/core/language/initialize.dart';
 import 'package:kaydi_mobile/core/routes/manager.dart';
 import 'package:kaydi_mobile/core/routes/route_names.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class TodoListSettingsView extends StatefulWidget {
   const TodoListSettingsView({super.key});
@@ -28,6 +29,7 @@ class _TodoListSettingsView extends BaseState<TodoListSettingsView> {
     super.initState();
     id = Get.parameters[Parameter.ID].toString();
     listName = Get.parameters[Parameter.LIST_NAME].toString();
+    checkCloud(id);
   }
 
   @override
@@ -45,27 +47,35 @@ class _TodoListSettingsView extends BaseState<TodoListSettingsView> {
           padding: EdgeInsets.symmetric(horizontal: dynamicWidth(0.05), vertical: 20),
           child: Column(
             children: [
-              TextField(
-                keyboardType: TextInputType.name,
-                readOnly: true,
-                onTap:
-                    null /* () {
-                  RouteManager.normalRoute(
-                    RouteName.LIST_SEARCH,
-                    parameters: {Parameter.ID: id},
-                  );
-                } */
-                ,
-                decoration: InputDecoration(
-                  isDense: true,
-                  helperMaxLines: 2,
-                  filled: true,
-                  hintText: translate(IKey.ADD_SOMEONE),
-                  helperText:
-                      translate(IKey.ADD_SOMEONE_DESCRIPTION) + " " + translate(IKey.MOVE_TO_CLOUD_DESCRIPTION_2),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(50),
-                    borderSide: BorderSide.none,
+              Obx(
+                () => TextField(
+                  keyboardType: TextInputType.name,
+                  readOnly: true,
+                  onTap: c.inCloud.value
+                      ? () {
+                          RouteManager.normalRoute(
+                            RouteName.LIST_SEARCH,
+                            parameters: {Parameter.ID: id},
+                          );
+                        }
+                      : () {
+                          Fluttertoast.showToast(
+                            msg: translate(IKey.TOAST_1),
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            fontSize: 16.0,
+                          );
+                        },
+                  decoration: InputDecoration(
+                    isDense: true,
+                    helperMaxLines: 2,
+                    filled: true,
+                    hintText: translate(IKey.ADD_SOMEONE),
+                    helperText: translate(IKey.ADD_SOMEONE_DESCRIPTION),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(50),
+                      borderSide: BorderSide.none,
+                    ),
                   ),
                 ),
               ),
@@ -94,28 +104,20 @@ class _TodoListSettingsView extends BaseState<TodoListSettingsView> {
                             ],
                           ),
                   ),
-                  title: Text(translate(IKey.MOVE_TO_CLOUD)),
-                  onTap: null /*  () {
-                    c.setLoading;
-                  } */
-                  ,
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        translate(IKey.MOVE_TO_CLOUD_DESCRIPTION),
-                        style: TextStyle(
-                          fontSize: 12,
+                  title: Text(c.inCloud.value ? translate(IKey.IN_CLOUD) : translate(IKey.MOVE_TO_CLOUD)),
+                  onTap: c.inCloud.value
+                      ? null
+                      : () {
+                          moveToCloud(id);
+                        },
+                  subtitle: c.inCloud.value
+                      ? null
+                      : Text(
+                          translate(IKey.MOVE_TO_CLOUD_DESCRIPTION),
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
                         ),
-                      ),
-                      Text(
-                        translate(IKey.MOVE_TO_CLOUD_DESCRIPTION_2),
-                        style: TextStyle(
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
-                  ),
                 ),
               ),
               Divider(),

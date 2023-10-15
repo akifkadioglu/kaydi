@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:kaydi_mobile/core/constants/app.dart';
 import 'package:kaydi_mobile/core/language/initialize.dart';
 import 'package:kaydi_mobile/core/models/app.dart';
@@ -11,9 +12,13 @@ import 'package:kaydi_mobile/core/routes/routes.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:kaydi_mobile/core/storage/manager.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
   await GetStorage.init();
+  WidgetsFlutterBinding.ensureInitialized();
+  MobileAds.instance.initialize();
+  await Firebase.initializeApp();
   runApp(const MyApp());
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 }
@@ -78,7 +83,7 @@ class _MyAppState extends State<MyApp> {
       locale: appModel?.language == 'en_US' ? Languages.ENGLISH : Languages.TURKISH,
       darkTheme: ThemeData.dark(),
       themeMode: ThemeMode.dark,
-      initialRoute: RouteName.LOGIN,
+      initialRoute: RouteName.LOADING,
       getPages: appRoutes,
       unknownRoute: unknownRoute,
     );

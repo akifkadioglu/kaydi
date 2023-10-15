@@ -17,7 +17,7 @@ class CreateTaskView extends StatefulWidget {
 }
 
 class _CreateTaskViewState extends BaseState<CreateTaskView> {
-  static const int TitleMaxLength = 500;
+  static const int TitleMaxLength = 700;
   ListsController c = Get.put(ListsController());
   String id = '';
   String listName = '';
@@ -47,10 +47,8 @@ class _CreateTaskViewState extends BaseState<CreateTaskView> {
                 children: [
                   TextFormField(
                     autofocus: true,
-                    keyboardType: TextInputType.name,
                     maxLength: TitleMaxLength,
                     textInputAction: TextInputAction.newline,
-                    smartDashesType: SmartDashesType.enabled,
                     onChanged: c.setTaskName,
                     maxLines: 5,
                     textCapitalization: TextCapitalization.sentences,

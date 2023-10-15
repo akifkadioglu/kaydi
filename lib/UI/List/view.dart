@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:kaydi_mobile/UI/Components/AppBar.dart';
 import 'package:kaydi_mobile/UI/List/controller.dart';
 import 'package:kaydi_mobile/core/base/state.dart';
 import 'package:kaydi_mobile/core/constants/components.dart';
 import 'package:kaydi_mobile/core/constants/parameters.dart';
+import 'package:kaydi_mobile/core/constants/texts.dart';
 import 'package:kaydi_mobile/core/controllers/lists_controllers.dart';
+import 'package:kaydi_mobile/core/language/initialize.dart';
 import 'package:kaydi_mobile/core/routes/manager.dart';
 import 'package:kaydi_mobile/core/routes/route_names.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -55,25 +58,59 @@ class _TodoListViewState extends BaseState<TodoListView> {
         ),
       ),
       body: Obx(
-        () => ListView.builder(
-          physics: BouncingScrollPhysics(),
-          itemCount: c.task.length,
-          itemBuilder: (context, index) => ListTile(
-            leading: Checkbox(
-              activeColor: const Color.fromARGB(255, 18, 84, 110),
-              value: c.task[index].isChecked,
-              onChanged: (bool? value) {
-                checkTask(id,c.task[index].id);
-              },
-            ),
-            onTap: () {
-              showTaskDialog(context, dynamicWidth(0.3), c.task[index], id);
-            },
-            onLongPress: () {
-              deleteTaskDialog(context, dynamicWidth(0.3), c.task[index].id, id);
-            },
-            title: Text(c.task[index].task),
-          ),
+        () => SizedBox(
+          child: c.task.length == 0
+              ? Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: dynamicWidth(0.05)),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Divider(),
+                        Icon(Icons.rocket_rounded, size: 100),
+                        Text(
+                          translate(IKey.FINISH_TASK_DESCRIPTION),
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.getFont(TextConstants.EmptyListText, fontSize: 16),
+                        ),
+                        Divider(),
+                      ]
+                          .map(
+                            (e) => Padding(
+                              padding: EdgeInsets.symmetric(vertical: 10),
+                              child: e,
+                            ),
+                          )
+                          .toList(),
+                    ),
+                  ),
+                )
+              : ListView.builder(
+                  physics: BouncingScrollPhysics(),
+                  itemCount: c.task.length,
+                  itemBuilder: (context, index) => ListTile(
+                    leading: Checkbox(
+                      activeColor: const Color.fromARGB(255, 18, 84, 110),
+                      value: c.task[index].isChecked,
+                      onChanged: (bool? value) {
+                        checkTask(id, c.task[index].id);
+                      },
+                    ),
+                    onTap: () {
+                      showTaskDialog(context, dynamicWidth(0.3), c.task[index], id);
+                    },
+                    onLongPress: () {
+                      deleteTaskDialog(context, dynamicWidth(0.3), c.task[index].id, id);
+                    },
+                    title: Text(
+                      c.task[index].task.replaceAll("\n", " "),
+                      style: TextStyle(
+                        fontSize: 14,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                ),
         ),
       ),
       floatingActionButton: FloatingActionButton(

@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:kaydi_mobile/core/base/state.dart';
 
 class BaseView<T> extends StatefulWidget {
   final Widget Function(BuildContext context) builder;
@@ -10,10 +13,11 @@ class BaseView<T> extends StatefulWidget {
   _BaseViewState<T> createState() => _BaseViewState<T>();
 }
 
-class _BaseViewState<T> extends State<BaseView<T>> {
+class _BaseViewState<T> extends BaseState<BaseView<T>> {
   @override
   void dispose() {
     super.dispose();
+
     if (widget.onDispose != null) widget.onDispose!();
   }
 
@@ -21,11 +25,13 @@ class _BaseViewState<T> extends State<BaseView<T>> {
     Future.delayed(Duration.zero, () {
       FocusScope.of(context).unfocus();
     });
+    
   }
 
   @override
   void initState() {
     buildPageBefore();
+
     super.initState();
   }
 

@@ -15,6 +15,7 @@ Map<String, String> get Turkish => {
       IKey.EMAIL.name: 'E-posta',
       IKey.NAME.name: 'İsim',
       IKey.LIST_REQUESTS.name: 'Liste istekleri',
+      IKey.LIST_REQUESTS_DESCRIPTION.name: 'Herkes sizi listeye ekleyebilir',
       IKey.LOGOUT.name: 'Çıkış yap',
       IKey.NEW_TASK.name: 'Yeni Görev',
       IKey.NEW_TASK_DESCRIPTION.name: 'Bu görevi ekledikten sonra listedeki herkese bildirim gidecektir.',
@@ -22,6 +23,7 @@ Map<String, String> get Turkish => {
       IKey.ADD_SOMEONE_DESCRIPTION.name: 'Listeye eklemek istediğiniz kişinin e-posta adresini arayın.',
       IKey.NOTIFICATIONS.name: 'Bildirimler',
       IKey.MOVE_TO_CLOUD.name: 'Buluta taşı',
+      IKey.IN_CLOUD.name: "Bulutta",
       IKey.MOVE_TO_CLOUD_DESCRIPTION.name:
           'Listenizi buluta taşıyarak istediğiniz kişileri listenize ekleyebilirsiniz.',
       IKey.MOVE_TO_CLOUD_DESCRIPTION_2.name: 'Şu an aktif değil',
@@ -33,4 +35,7 @@ Map<String, String> get Turkish => {
       IKey.DELETE.name: 'Sil',
       IKey.CHECK.name: 'İşaretle',
       IKey.UNCHECK.name: 'İşareti kaldır',
+      IKey.FINISH_LIST_DESCRIPTION.name: 'Tüm listeleri bitirmişsin, tatile çıkabilirsin 🥳',
+      IKey.FINISH_TASK_DESCRIPTION.name: 'Hadi yeni bir görev oluştur! yapılacak çok şey var 🙃',
+      IKey.TOAST_1.name: "Öncelikle listeyi buluta taşımanız gerekiyor",
     };
