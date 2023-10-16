@@ -38,4 +38,7 @@ Map<String, String> get English => {
       IKey.FINISH_LIST_DESCRIPTION.name: 'You finished all the lists, you can go on a vacation 🥳',
       IKey.FINISH_TASK_DESCRIPTION.name: 'Let\'s create a new task! There is so much to do 🙃',
       IKey.TOAST_1.name: "First you need to move the list to the cloud",
+      IKey.TOAST_2.name: "You should login and connect to internet!",
+      IKey.CLOUD.name: 'Cloud',
+      IKey.LOCAL.name: 'Local',
     };

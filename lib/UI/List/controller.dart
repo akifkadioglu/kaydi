@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kaydi_mobile/core/cloud/manager.dart';
 import 'package:kaydi_mobile/core/controllers/lists_controllers.dart';
 import 'package:kaydi_mobile/core/language/initialize.dart';
 import 'package:kaydi_mobile/core/models/list_task.dart';
@@ -13,44 +15,65 @@ void getTasks(String id) {
   c.task.value = c.list.firstWhere((element) => element.id == id).task;
 }
 
-void checkTask(String list_id, String task_id) {
+void checkTask(ListElement theList, Task task) async {
   ListsController c = Get.put(ListsController());
-
-  var list = StorageManager.instance.getData(SKey.LISTS);
-  var model = listTaskModelFromJson(list);
-
-  model.list
-          .firstWhere((element) => element.id == list_id)
-          .task
-          .firstWhere((element) => element.id == task_id)
-          .isChecked =
-      !model.list
-          .firstWhere((element) => element.id == list_id)
-          .task
-          .firstWhere((element) => element.id == task_id)
-          .isChecked;
-
-  StorageManager.instance.setData(SKey.LISTS, json.encode(model));
-
-  c.task.firstWhere((element) => element.id == task_id).isChecked =
-      !c.task.firstWhere((element) => element.id == task_id).isChecked;
+  c.task.firstWhere((element) => element.id == task.id).isChecked =
+      !c.task.firstWhere((element) => element.id == task.id).isChecked;
   c.task.refresh();
-}
-
-void deleteTask(String list_id, String task_id) {
-  ListsController c = Get.put(ListsController());
-
   var list = StorageManager.instance.getData(SKey.LISTS);
   var model = listTaskModelFromJson(list);
+  if (theList.inCloud) {
+    var docRef = CloudManager.getDoc(CloudManager.LISTS, theList.id);
+    var documentSnapshot = await docRef.get();
 
-  model.list.firstWhere((element) => element.id == list_id).task.removeWhere((element) => element.id == task_id);
+    if (documentSnapshot.exists) {
+      List<dynamic> currentArray = documentSnapshot.data()?["task"] ?? [];
 
-  StorageManager.instance.setData(SKey.LISTS, json.encode(model));
+      int itemIndex = currentArray.indexWhere((item) {
+        return item is Map<String, dynamic> && item["id"] == task.id;
+      });
 
-  c.task.removeWhere((element) => element.id == task_id);
+      if (itemIndex != -1) {
+        currentArray[itemIndex]["is_checked"] = !currentArray[itemIndex]["is_checked"];
+        docRef.update({"task": currentArray});
+      }
+    }
+  } else {
+    model.list
+            .firstWhere((element) => element.id == theList.id)
+            .task
+            .firstWhere((element) => element.id == task.id)
+            .isChecked =
+        !model.list
+            .firstWhere((element) => element.id == theList.id)
+            .task
+            .firstWhere((element) => element.id == task.id)
+            .isChecked;
+
+    StorageManager.instance.setData(SKey.LISTS, json.encode(model));
+  }
 }
 
-Future<dynamic> deleteTaskDialog(BuildContext context, double width, String task_id, String list_id) {
+void deleteTask(ListElement theList, Task task) {
+  ListsController c = Get.put(ListsController());
+  if (theList.inCloud) {
+    var docRef = CloudManager.getDoc(CloudManager.LISTS, theList.id);
+
+    docRef.update({
+      "task": FieldValue.arrayRemove([task.toJson()])
+    });
+  } else {
+    var list = StorageManager.instance.getData(SKey.LISTS);
+    var model = listTaskModelFromJson(list);
+
+    model.list.firstWhere((element) => element.id == theList.id).task.removeWhere((element) => element.id == task.id);
+
+    StorageManager.instance.setData(SKey.LISTS, json.encode(model));
+  }
+  c.task.removeWhere((element) => element.id == task.id);
+}
+
+Future<dynamic> deleteTaskDialog(BuildContext context, double width, Task task, ListElement list) {
   return showDialog(
     context: context,
     barrierDismissible: false,
@@ -88,7 +111,7 @@ Future<dynamic> deleteTaskDialog(BuildContext context, double width, String task
                     elevation: 0,
                   ),
                   onPressed: () {
-                    deleteTask(list_id, task_id);
+                    deleteTask(list, task);
                     RouteManager.back();
                   },
                   child: Text(translate(IKey.DELETE)),
@@ -102,7 +125,7 @@ Future<dynamic> deleteTaskDialog(BuildContext context, double width, String task
   );
 }
 
-Future<dynamic> showTaskDialog(BuildContext context, double width, Task task, String list_id) {
+Future<dynamic> showTaskDialog(BuildContext context, double width, Task task, ListElement theList) {
   return showDialog(
     context: context,
     barrierDismissible: false,
@@ -137,7 +160,7 @@ Future<dynamic> showTaskDialog(BuildContext context, double width, Task task, St
                     elevation: 0,
                   ),
                   onPressed: () {
-                    checkTask(list_id, task.id);
+                    checkTask(theList, task);
                     RouteManager.back();
                   },
                   child: Text(task.isChecked ? translate(IKey.UNCHECK) : translate(IKey.CHECK)),

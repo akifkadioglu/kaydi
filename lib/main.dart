@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:home_widget/home_widget.dart';
 import 'package:kaydi_mobile/core/constants/app.dart';
 import 'package:kaydi_mobile/core/language/initialize.dart';
 import 'package:kaydi_mobile/core/models/app.dart';
@@ -19,6 +20,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
   await Firebase.initializeApp();
+  HomeWidget.setAppGroupId('com.kaydiApp');
   runApp(const MyApp());
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 }
@@ -37,7 +39,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    //StorageManager.instance.clearData();
     var app = StorageManager.instance.getData(SKey.APP);
     print(app);
     var lists = StorageManager.instance.getData(SKey.LISTS);

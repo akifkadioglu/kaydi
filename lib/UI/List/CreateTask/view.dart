@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kaydi_mobile/UI/Components/AppBar.dart';
@@ -8,6 +10,7 @@ import 'package:kaydi_mobile/core/constants/components.dart';
 import 'package:kaydi_mobile/core/constants/parameters.dart';
 import 'package:kaydi_mobile/core/controllers/lists_controllers.dart';
 import 'package:kaydi_mobile/core/language/initialize.dart';
+import 'package:kaydi_mobile/core/models/list_task.dart';
 
 class CreateTaskView extends StatefulWidget {
   const CreateTaskView({super.key});
@@ -17,16 +20,13 @@ class CreateTaskView extends StatefulWidget {
 }
 
 class _CreateTaskViewState extends BaseState<CreateTaskView> {
-  static const int TitleMaxLength = 700;
+  static const int TitleMaxLength = 1500;
   ListsController c = Get.put(ListsController());
-  String id = '';
-  String listName = '';
 
   @override
   void initState() {
     super.initState();
-    id = Get.parameters[Parameter.ID].toString();
-    listName = Get.parameters[Parameter.LIST_NAME].toString();
+    c.theList.value = ListElement.fromJson(jsonDecode(Get.parameters[Parameter.LIST].toString()));
   }
 
   @override
@@ -35,7 +35,7 @@ class _CreateTaskViewState extends BaseState<CreateTaskView> {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(ComponentsConstants.AppbarHeight),
         child: K_Appbar(
-          AppText: listName,
+          AppText: c.theList.value.name,
         ),
       ),
       body: SingleChildScrollView(
@@ -81,7 +81,7 @@ class _CreateTaskViewState extends BaseState<CreateTaskView> {
       ),
       bottomSheet: CancelCreateBottomBar(
         createFunc: () {
-          createTask(c.taskName.value, id);
+          createTask(c.taskName.value, c.theList.value);
         },
       ),
     );

@@ -5,6 +5,7 @@ import 'package:kaydi_mobile/UI/CreateList/view.dart';
 import 'package:kaydi_mobile/UI/Home/view.dart';
 import 'package:kaydi_mobile/UI/List/CreateTask/view.dart';
 import 'package:kaydi_mobile/UI/List/Settings/Search/view.dart';
+import 'package:kaydi_mobile/UI/List/Settings/Users/view.dart';
 import 'package:kaydi_mobile/UI/List/Settings/view.dart';
 import 'package:kaydi_mobile/UI/List/view.dart';
 import 'package:kaydi_mobile/UI/Loading/view.dart';
@@ -24,7 +25,7 @@ get appRoutes => [
         const LoadingView(),
         transition: Transition.fade,
       ),
-      
+
       buildRoute(
         RouteName.LOGIN,
         const LoginView(),
@@ -61,6 +62,12 @@ get appRoutes => [
       buildRoute(
         RouteName.LIST_SEARCH,
         const TodoListSearchView(),
+        millisecond: 200,
+        transition: Transition.fadeIn,
+      ),
+      buildRoute(
+        RouteName.LIST_USERS,
+        const ListUsersView(),
         millisecond: 200,
         transition: Transition.fadeIn,
       ),

@@ -38,4 +38,7 @@ Map<String, String> get Turkish => {
       IKey.FINISH_LIST_DESCRIPTION.name: 'Tüm listeleri bitirmişsin, tatile çıkabilirsin 🥳',
       IKey.FINISH_TASK_DESCRIPTION.name: 'Hadi yeni bir görev oluştur! yapılacak çok şey var 🙃',
       IKey.TOAST_1.name: "Öncelikle listeyi buluta taşımanız gerekiyor",
+      IKey.TOAST_2.name: "Giriş yapmalısın ve internetin olmalı!",
+      IKey.CLOUD.name: 'Bulut',
+      IKey.LOCAL.name: 'Lokal',
     };

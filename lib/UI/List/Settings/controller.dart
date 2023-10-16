@@ -1,30 +1,62 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:kaydi_mobile/UI/List/Settings/view_controller.dart';
+import 'package:kaydi_mobile/core/cloud/manager.dart';
 import 'package:kaydi_mobile/core/controllers/lists_controllers.dart';
+import 'package:kaydi_mobile/core/language/initialize.dart';
 import 'package:kaydi_mobile/core/models/list_task.dart';
+import 'package:kaydi_mobile/core/models/user_lists_model.dart';
 import 'package:kaydi_mobile/core/storage/manager.dart';
+import 'package:kaydi_mobile/core/toast/manager.dart';
 
 void checkCloud(String id) {
-  TodoListSettingsViewController c = Get.put(TodoListSettingsViewController());
+  ListsController c = Get.put(ListsController());
   var list = StorageManager.instance.getData(SKey.LISTS);
   var model = listTaskModelFromJson(list);
-  c.inCloud.value = model.list.firstWhereOrNull((element) => element.id == id)?.inCloud ?? false;
+  c.theList.value.inCloud = model.list.firstWhereOrNull((element) => element.id == id)?.inCloud ?? true;
+  c.theList.refresh();
 }
 
-void leaveFromList(String id) {
+void leaveFromList(String id) async {
   ListsController c = Get.put(ListsController());
+  final FirebaseAuth auth = FirebaseAuth.instance;
 
   var list = StorageManager.instance.getData(SKey.LISTS);
   var model = listTaskModelFromJson(list);
   model.list.removeWhere((element) => element.id == id);
   StorageManager.instance.setData(SKey.LISTS, json.encode(model));
   c.list.removeWhere((element) => element.id == id);
+  CloudManager.getCollection(CloudManager.USER_LISTS)
+      .where(
+        "user_id",
+        isEqualTo: auth.currentUser?.uid ?? "",
+      )
+      .where(
+        "list_id",
+        isEqualTo: id,
+      )
+      .get()
+      .then((QuerySnapshot<Map<String, dynamic>> snapshot) {
+    snapshot.docs.forEach((DocumentSnapshot<Map<String, dynamic>> doc) {
+      doc.reference.delete();
+    });
+  });
+
+  CloudManager.getDoc(CloudManager.USER_LISTS, id).delete();
   c.list.refresh();
 }
 
-void moveToCloud(String id) {
+void moveToCloud(String id) async {
+  bool result = await InternetConnectionChecker().hasConnection;
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  if (!result || auth.currentUser == null) {
+    ToastManager.toast(translate(IKey.TOAST_2));
+    return;
+  }
   ListsController c = Get.put(ListsController());
   TodoListSettingsViewController todoController = Get.put(TodoListSettingsViewController());
 
@@ -32,11 +64,17 @@ void moveToCloud(String id) {
 
   var list = StorageManager.instance.getData(SKey.LISTS);
   var model = listTaskModelFromJson(list);
-  model.list.firstWhereOrNull((element) => element.id == id)?.inCloud = true;
-  StorageManager.instance.setData(SKey.LISTS, json.encode(model));
-  c.list.firstWhereOrNull((element) => element.id == id)?.inCloud = true;
-  todoController.inCloud.value = true;
-  c.list.refresh();
+  var element = model.list.firstWhereOrNull((element) => element.id == id);
+  element?.inCloud = true;
+  await CloudManager.getDoc(CloudManager.LISTS, id).set(element!.toJson());
+  await CloudManager.getCollection(CloudManager.USER_LISTS).add(
+    UserListsModel(userId: auth.currentUser?.uid ?? "", listId: id).toJson(),
+  );
 
+  model.list.removeWhere((element) => element.id == id);
+  StorageManager.instance.setData(SKey.LISTS, json.encode(model));
+  c.list.removeWhere((element) => element.id == id);
+  c.theList.value.inCloud = true;
+  c.theList.refresh();
   todoController.setLoading;
 }

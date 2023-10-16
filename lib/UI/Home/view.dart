@@ -1,16 +1,16 @@
+import 'dart:convert';
+
 import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:kaydi_mobile/UI/Components/AppBar.dart';
 import 'package:kaydi_mobile/UI/Home/controller.dart';
 import 'package:kaydi_mobile/core/ads/service.dart';
 import 'package:kaydi_mobile/core/base/state.dart';
 import 'package:kaydi_mobile/core/base/view.dart';
 import 'package:kaydi_mobile/core/constants/app.dart';
-import 'package:kaydi_mobile/core/constants/components.dart';
 import 'package:kaydi_mobile/core/constants/parameters.dart';
 import 'package:kaydi_mobile/core/constants/texts.dart';
 import 'package:kaydi_mobile/core/controllers/lists_controllers.dart';
@@ -29,7 +29,11 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends BaseState<HomeView> {
   ListsController c = Get.put(ListsController());
   final FirebaseAuth auth = FirebaseAuth.instance;
-
+  final List<String> items = [
+    translate(IKey.CLOUD),
+    translate(IKey.LOCAL),
+  ];
+  String? selectedValue;
   @override
   void initState() {
     super.initState();
@@ -38,11 +42,16 @@ class _HomeViewState extends BaseState<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(ComponentsConstants.AppbarHeight),
-        child: K_Appbar(
-          AppText: AppConstant.AppName,
-          action: auth.currentUser != null
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        title: Text(
+          AppConstant.AppName,
+          style: GoogleFonts.getFont(TextConstants.AppbarText,
+              color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600),
+        ),
+        actions: [
+          auth.currentUser != null
               ? Padding(
                   padding: EdgeInsets.symmetric(horizontal: 15.0),
                   child: Icon(
@@ -50,8 +59,8 @@ class _HomeViewState extends BaseState<HomeView> {
                     color: Colors.lightBlueAccent,
                   ),
                 )
-              : SizedBox(),
-        ),
+              : SizedBox()
+        ],
       ),
       body: BaseView(builder: (context) {
         return Obx(
@@ -118,8 +127,7 @@ class _HomeViewState extends BaseState<HomeView> {
                               RouteManager.normalRoute(
                                 RouteName.TODOLIST,
                                 parameters: {
-                                  Parameter.ID: c.list[index].id,
-                                  Parameter.LIST_NAME: c.list[index].name,
+                                  Parameter.LIST: json.encode(c.list[index]),
                                 },
                               );
                             },

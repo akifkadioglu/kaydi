@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -9,6 +11,7 @@ import 'package:kaydi_mobile/core/constants/parameters.dart';
 import 'package:kaydi_mobile/core/constants/texts.dart';
 import 'package:kaydi_mobile/core/controllers/lists_controllers.dart';
 import 'package:kaydi_mobile/core/language/initialize.dart';
+import 'package:kaydi_mobile/core/models/list_task.dart';
 import 'package:kaydi_mobile/core/routes/manager.dart';
 import 'package:kaydi_mobile/core/routes/route_names.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -21,15 +24,12 @@ class TodoListView extends StatefulWidget {
 }
 
 class _TodoListViewState extends BaseState<TodoListView> {
-  String id = '';
-  String listName = '';
   ListsController c = Get.put(ListsController());
   @override
   void initState() {
     super.initState();
-    id = Get.parameters[Parameter.ID].toString();
-    listName = Get.parameters[Parameter.LIST_NAME].toString();
-    getTasks(id);
+    c.theList.value = ListElement.fromJson(jsonDecode(Get.parameters[Parameter.LIST].toString()));
+    getTasks(c.theList.value.id);
     c.task.listen((val) {
       print(val);
     });
@@ -41,7 +41,7 @@ class _TodoListViewState extends BaseState<TodoListView> {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(ComponentsConstants.AppbarHeight),
         child: K_Appbar(
-          AppText: listName,
+          AppText: c.theList.value.name,
           action: IconButton(
             splashRadius: 20,
             icon: Icon(Icons.settings),
@@ -49,8 +49,7 @@ class _TodoListViewState extends BaseState<TodoListView> {
               RouteManager.normalRoute(
                 RouteName.LIST_SETTINGS,
                 parameters: {
-                  Parameter.ID: id,
-                  Parameter.LIST_NAME: listName,
+                  Parameter.LIST: jsonEncode(c.theList.value),
                 },
               );
             },
@@ -93,18 +92,19 @@ class _TodoListViewState extends BaseState<TodoListView> {
                       activeColor: const Color.fromARGB(255, 18, 84, 110),
                       value: c.task[index].isChecked,
                       onChanged: (bool? value) {
-                        checkTask(id, c.task[index].id);
+                        checkTask(c.theList.value, c.task[index]);
                       },
                     ),
                     onTap: () {
-                      showTaskDialog(context, dynamicWidth(0.3), c.task[index], id);
+                      showTaskDialog(context, dynamicWidth(0.3), c.task[index], c.theList.value);
                     },
                     onLongPress: () {
-                      deleteTaskDialog(context, dynamicWidth(0.3), c.task[index].id, id);
+                      deleteTaskDialog(context, dynamicWidth(0.3), c.task[index], c.theList.value);
                     },
                     title: Text(
                       c.task[index].task.replaceAll("\n", " "),
                       style: TextStyle(
+                        decoration: c.task[index].isChecked ? TextDecoration.lineThrough : null,
                         fontSize: 14,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -118,8 +118,7 @@ class _TodoListViewState extends BaseState<TodoListView> {
           RouteManager.normalRoute(
             RouteName.CREATE_TASK,
             parameters: {
-              Parameter.ID: id,
-              Parameter.LIST_NAME: listName,
+              Parameter.LIST: jsonEncode(c.theList.value),
             },
           );
         },

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kaydi_mobile/UI/Components/AppBar.dart';
@@ -6,11 +8,13 @@ import 'package:kaydi_mobile/UI/List/Settings/view_controller.dart';
 import 'package:kaydi_mobile/core/base/state.dart';
 import 'package:kaydi_mobile/core/constants/components.dart';
 import 'package:kaydi_mobile/core/constants/parameters.dart';
+import 'package:kaydi_mobile/core/controllers/lists_controllers.dart';
 import 'package:kaydi_mobile/core/language/initialize.dart';
+import 'package:kaydi_mobile/core/models/list_task.dart';
 import 'package:kaydi_mobile/core/routes/manager.dart';
 import 'package:kaydi_mobile/core/routes/route_names.dart';
+import 'package:kaydi_mobile/core/toast/manager.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class TodoListSettingsView extends StatefulWidget {
   const TodoListSettingsView({super.key});
@@ -20,16 +24,14 @@ class TodoListSettingsView extends StatefulWidget {
 }
 
 class _TodoListSettingsView extends BaseState<TodoListSettingsView> {
-  String id = '';
-  String listName = '';
-  TodoListSettingsViewController c = Get.put(TodoListSettingsViewController());
+  ListsController c = Get.put(ListsController());
+  TodoListSettingsViewController todoListController = Get.put(TodoListSettingsViewController());
 
   @override
   void initState() {
     super.initState();
-    id = Get.parameters[Parameter.ID].toString();
-    listName = Get.parameters[Parameter.LIST_NAME].toString();
-    checkCloud(id);
+    c.theList.value = ListElement.fromJson(jsonDecode(Get.parameters[Parameter.LIST].toString()));
+    checkCloud(c.theList.value.id);
   }
 
   @override
@@ -37,7 +39,7 @@ class _TodoListSettingsView extends BaseState<TodoListSettingsView> {
     return Scaffold(
       appBar: PreferredSize(
         child: K_Appbar(
-          AppText: listName,
+          AppText: c.theList.value.name,
         ),
         preferredSize: Size.fromHeight(ComponentsConstants.AppbarHeight),
       ),
@@ -51,20 +53,15 @@ class _TodoListSettingsView extends BaseState<TodoListSettingsView> {
                 () => TextField(
                   keyboardType: TextInputType.name,
                   readOnly: true,
-                  onTap: c.inCloud.value
+                  onTap: c.theList.value.inCloud
                       ? () {
                           RouteManager.normalRoute(
                             RouteName.LIST_SEARCH,
-                            parameters: {Parameter.ID: id},
+                            parameters: {Parameter.ID: c.theList.value.id},
                           );
                         }
                       : () {
-                          Fluttertoast.showToast(
-                            msg: translate(IKey.TOAST_1),
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.BOTTOM,
-                            fontSize: 16.0,
-                          );
+                          ToastManager.toast(translate(IKey.TOAST_1));
                         },
                   decoration: InputDecoration(
                     isDense: true,
@@ -95,7 +92,7 @@ class _TodoListSettingsView extends BaseState<TodoListSettingsView> {
                   leading: AnimatedSwitcher(
                     duration: Duration(milliseconds: 300),
                     switchOutCurve: Curves.easeInOut,
-                    child: c.isLoading.value
+                    child: todoListController.isLoading.value
                         ? CircularProgressIndicator()
                         : Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -104,13 +101,13 @@ class _TodoListSettingsView extends BaseState<TodoListSettingsView> {
                             ],
                           ),
                   ),
-                  title: Text(c.inCloud.value ? translate(IKey.IN_CLOUD) : translate(IKey.MOVE_TO_CLOUD)),
-                  onTap: c.inCloud.value
+                  title: Text(c.theList.value.inCloud ? translate(IKey.IN_CLOUD) : translate(IKey.MOVE_TO_CLOUD)),
+                  onTap: c.theList.value.inCloud
                       ? null
                       : () {
-                          moveToCloud(id);
+                          moveToCloud(c.theList.value.id);
                         },
-                  subtitle: c.inCloud.value
+                  subtitle: c.theList.value.inCloud
                       ? null
                       : Text(
                           translate(IKey.MOVE_TO_CLOUD_DESCRIPTION),
@@ -130,7 +127,7 @@ class _TodoListSettingsView extends BaseState<TodoListSettingsView> {
                 ),
                 title: Text(translate(IKey.LEAVE)),
                 onTap: () {
-                  leaveFromList(id);
+                  leaveFromList(c.theList.value.id);
                   RouteManager.goRouteAndRemoveBefore(RouteName.HOME);
                 },
                 subtitle: Text(

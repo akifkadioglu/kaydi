@@ -13,6 +13,7 @@ class RouteName {
   static const CREATE_TASK = "/list/task";
   static const LIST_SETTINGS = "/list/settings";
   static const LIST_SEARCH = "/list/search";
+  static const LIST_USERS = "/list/users";
 
   //account
   static const ACCOUNT = "/account";
