@@ -16,7 +16,7 @@ void createTask(String task, ListElement theList) async {
   var list = StorageManager.instance.getData(SKey.LISTS);
   var model = listTaskModelFromJson(list);
 
-  var newTask = Task(id: uuid.v1(), task: task, isChecked: false);
+  var newTask = Task(id: uuid.v1(), task: task.trim(), isChecked: false);
   c.task.add(newTask);
   model.list.firstWhereOrNull((element) => element.id == theList.id)?.task.add(newTask);
   StorageManager.instance.setData(SKey.LISTS, json.encode(model));

@@ -12,10 +12,16 @@ void createList(String name) {
 
   var list = StorageManager.instance.getData(SKey.LISTS);
   var model = listTaskModelFromJson(list);
-  var newElement = ListElement(id: uuid.v1(), name: name, task: [], inCloud: false);
+  var newElement = ListElement(id: uuid.v1(), name: name.trim(), task: [], inCloud: false);
   model.list.add(
     newElement,
   );
+  model.list.sort(
+    (a, b) => a.name.compareTo(b.name),
+  );
   StorageManager.instance.setData(SKey.LISTS, json.encode(model));
   c.list.add(newElement);
+  c.list.sort(
+    (a, b) => a.name.compareTo(b.name),
+  );
 }

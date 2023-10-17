@@ -51,16 +51,17 @@ void leaveFromList(String id) async {
 }
 
 void moveToCloud(String id) async {
-  bool result = await InternetConnectionChecker().hasConnection;
-  final FirebaseAuth auth = FirebaseAuth.instance;
-  if (!result || auth.currentUser == null) {
-    ToastManager.toast(translate(IKey.TOAST_2));
-    return;
-  }
   ListsController c = Get.put(ListsController());
   TodoListSettingsViewController todoController = Get.put(TodoListSettingsViewController());
 
   todoController.setLoading;
+  bool result = await InternetConnectionChecker().hasConnection;
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  if (!result || auth.currentUser == null) {
+    ToastManager.toast(translate(IKey.TOAST_2));
+    todoController.setLoading;
+    return;
+  }
 
   var list = StorageManager.instance.getData(SKey.LISTS);
   var model = listTaskModelFromJson(list);
@@ -73,8 +74,10 @@ void moveToCloud(String id) async {
 
   model.list.removeWhere((element) => element.id == id);
   StorageManager.instance.setData(SKey.LISTS, json.encode(model));
-  c.list.removeWhere((element) => element.id == id);
+
   c.theList.value.inCloud = true;
+  c.list.firstWhereOrNull((element) => element.id == id)?.inCloud = true;
+  c.list.refresh();
   c.theList.refresh();
   todoController.setLoading;
 }

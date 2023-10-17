@@ -122,6 +122,17 @@ class _TodoListSettingsView extends BaseState<TodoListSettingsView> {
                 leading: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    Icon(MdiIcons.accountOutline),
+                  ],
+                ),
+                title: Text(translate(IKey.USERS)),
+                onTap: () {},
+                
+              ),
+              ListTile(
+                leading: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
                     Icon(MdiIcons.logout),
                   ],
                 ),

@@ -41,4 +41,5 @@ Map<String, String> get English => {
       IKey.TOAST_2.name: "You should login and connect to internet!",
       IKey.CLOUD.name: 'Cloud',
       IKey.LOCAL.name: 'Local',
+      IKey.USERS.name: 'Users',
     };

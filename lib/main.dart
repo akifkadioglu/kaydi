@@ -39,6 +39,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    //StorageManager.instance.clearData();
     var app = StorageManager.instance.getData(SKey.APP);
     print(app);
     var lists = StorageManager.instance.getData(SKey.LISTS);

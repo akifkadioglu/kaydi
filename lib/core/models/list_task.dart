@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 ListTaskModel listTaskModelFromJson(String str) => ListTaskModel.fromJson(json.decode(str));
 
 String listTaskModelToJson(ListTaskModel data) => json.encode(data.toJson());
@@ -43,7 +45,16 @@ class ListElement {
         task: List<Task>.from(json["task"].map((x) => Task.fromJson(x))),
         inCloud: json["in_cloud"],
       );
+  factory ListElement.fromFirestore(DocumentSnapshot<Map<String, dynamic>> snapshot) {
+    Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
 
+    return ListElement(
+      id: data["id"],
+      name: data["name"],
+      task: data["task"],
+      inCloud: data["in_cloud"],
+    );
+  }
   Map<String, dynamic> toJson() => {
         "id": id,
         "name": name,

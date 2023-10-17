@@ -41,4 +41,5 @@ Map<String, String> get Turkish => {
       IKey.TOAST_2.name: "Giriş yapmalısın ve internetin olmalı!",
       IKey.CLOUD.name: 'Bulut',
       IKey.LOCAL.name: 'Lokal',
+      IKey.USERS.name: 'Kullanıcılar',
     };
