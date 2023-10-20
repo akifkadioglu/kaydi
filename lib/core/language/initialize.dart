@@ -77,4 +77,7 @@ enum IKey {
   CLOUD,
   LOCAL,
   USERS,
+  ADD,
+  ADD_USER_TO_LIST,
+  ALREADY_ADDED_TO_LIST,
 }

@@ -42,4 +42,7 @@ Map<String, String> get Turkish => {
       IKey.CLOUD.name: 'Bulut',
       IKey.LOCAL.name: 'Lokal',
       IKey.USERS.name: 'Kullanıcılar',
+      IKey.ADD_USER_TO_LIST.name: 'eklenmek üzere',
+      IKey.ADD.name: 'Ekle',
+      IKey.ALREADY_ADDED_TO_LIST.name: 'Zaten listeye eklendi',
     };

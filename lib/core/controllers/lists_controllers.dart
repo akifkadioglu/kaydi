@@ -7,6 +7,7 @@ class ListsController extends GetxController {
   var list = <ListElement>[].obs;
   var task = <Task>[].obs;
   var theList = ListElement(id: "", name: "", task: [], inCloud: false).obs;
+  var theListUserIds = <String>[].obs;
 
   var taskName = ''.obs;
 

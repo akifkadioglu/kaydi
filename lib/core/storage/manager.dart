@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:get_storage/get_storage.dart';
 
 class StorageManager {
@@ -10,6 +12,8 @@ class StorageManager {
     box = GetStorage();
   }
   void setData(SKey key, dynamic value) => GetStorage().write(key.name, value);
+  void setList(SKey storageKey, List<dynamic> storageValue) async =>
+      await GetStorage().write(storageKey.name, jsonEncode(storageValue));
 
   int? getInt(SKey key) => GetStorage().read(key.name);
 
@@ -21,10 +25,16 @@ class StorageManager {
 
   dynamic getData(SKey key) => GetStorage().read(key.name);
 
+  List<dynamic> getList(SKey storageKey) {
+    List<dynamic> result = jsonDecode(GetStorage().read(storageKey.name) ?? "[]");
+    return result;
+  }
+
   void clearData() async => GetStorage().erase();
 }
 
 enum SKey {
   APP,
   LISTS,
+  NOTIFICATIONS,
 }

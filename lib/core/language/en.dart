@@ -42,4 +42,8 @@ Map<String, String> get English => {
       IKey.CLOUD.name: 'Cloud',
       IKey.LOCAL.name: 'Local',
       IKey.USERS.name: 'Users',
+      IKey.ADD_USER_TO_LIST.name: 'is about to be added',
+      IKey.ADD.name: 'Add',
+      IKey.ALREADY_ADDED_TO_LIST.name: 'Already added to the list',
+      
     };

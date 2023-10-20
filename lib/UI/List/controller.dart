@@ -10,9 +10,17 @@ import 'package:kaydi_mobile/core/models/list_task.dart';
 import 'package:kaydi_mobile/core/routes/manager.dart';
 import 'package:kaydi_mobile/core/storage/manager.dart';
 
-void getTasks(String id) {
+void getTasks() async {
   ListsController c = Get.put(ListsController());
-  c.task.value = c.list.firstWhere((element) => element.id == id).task;
+  c.task.value = c.list.firstWhere((element) => element.id == c.theList.value.id).task;
+
+  c.theListUserIds.clear();
+  var usersOfList =
+      await CloudManager.getCollection(CloudManager.USER_LISTS).where('list_id', isEqualTo: c.theList.value.id).get();
+
+  for (var element in usersOfList.docs) {
+    c.theListUserIds.add(element['user_id']);
+  }
 }
 
 void checkTask(ListElement theList, Task task) async {

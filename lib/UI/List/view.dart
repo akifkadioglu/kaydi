@@ -29,10 +29,8 @@ class _TodoListViewState extends BaseState<TodoListView> {
   void initState() {
     super.initState();
     c.theList.value = ListElement.fromJson(jsonDecode(Get.parameters[Parameter.LIST].toString()));
-    getTasks(c.theList.value.id);
-    c.task.listen((val) {
-      print(val);
-    });
+    getTasks();
+    
   }
 
   @override

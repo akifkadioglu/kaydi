@@ -8,7 +8,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:kaydi_mobile/UI/Home/controller.dart';
 import 'package:kaydi_mobile/UI/Home/view_controller.dart';
-import 'package:kaydi_mobile/core/ads/service.dart';
 import 'package:kaydi_mobile/core/base/state.dart';
 import 'package:kaydi_mobile/core/base/view.dart';
 import 'package:kaydi_mobile/core/constants/app.dart';
@@ -62,88 +61,86 @@ class _HomeViewState extends BaseState<HomeView> {
       ),
       body: BaseView(builder: (context) {
         return Obx(
-          () => SizedBox(
-            child: c.list.length == 0
-                ? Center(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: dynamicWidth(0.05)),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Divider(),
-                          Icon(Icons.task_alt_rounded, size: 100),
-                          Text(
-                            translate(IKey.FINISH_LIST_DESCRIPTION),
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.getFont(TextConstants.EmptyListText, fontSize: 16),
-                          ),
-                          Divider(),
-                        ]
-                            .map(
-                              (e) => Padding(
-                                padding: EdgeInsets.symmetric(vertical: 10),
-                                child: e,
+          () => ListView(
+            physics: BouncingScrollPhysics(),
+            children: [
+              homeViewController.isLoading.value ? LinearProgressIndicator() : SizedBox(),
+              SizedBox(
+                child: c.list.length == 0
+                    ? Center(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: dynamicWidth(0.05)),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Divider(),
+                              Icon(Icons.task_alt_rounded, size: 100),
+                              Text(
+                                translate(IKey.FINISH_LIST_DESCRIPTION),
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.getFont(TextConstants.EmptyListText, fontSize: 16),
                               ),
-                            )
-                            .toList(),
-                      ),
-                    ),
-                  )
-                : ListView(
-                    physics: BouncingScrollPhysics(),
-                    children: [
-                      homeViewController.isLoading.value ? LinearProgressIndicator() : SizedBox(),
-                      ListView.separated(
+                              Divider(),
+                            ]
+                                .map(
+                                  (e) => Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 10),
+                                    child: e,
+                                  ),
+                                )
+                                .toList(),
+                          ),
+                        ),
+                      )
+                    : ListView.separated(
                         shrinkWrap: true,
                         physics: ClampingScrollPhysics(),
                         itemCount: c.list.length,
                         itemBuilder: (context, index) {
-                          BannerAd banner = AdMobService().getAd();
-                          return Column(
-                            children: [
-                              if (index % 3 == 0)
-                                Stack(
-                                  children: [
-                                    SizedBox(
-                                      height: banner.size.height.toDouble(),
-                                      width: banner.size.width.toDouble(),
-                                      child: DecoratedBox(
-                                        decoration: BoxDecoration(color: themeData.cardColor),
+                          return FutureBuilder(
+                            future: loadBannerAd(),
+                            builder: (context, snapshot) {
+                              print(snapshot.data);
+                              return Column(
+                                children: [
+                                  if (index % 3 == 0 && snapshot.data != null)
+                                    Container(
+                                      decoration: BoxDecoration(color: themeData.cardColor),
+                                      padding: const EdgeInsets.symmetric(vertical: 40.0),
+                                      child: SizedBox(
+                                        height: snapshot.data.size.height.toDouble(),
+                                        width: snapshot.data.size.width.toDouble(),
+                                        child: AdWidget(
+                                          ad: snapshot.data,
+                                        ),
                                       ),
                                     ),
-                                    SizedBox(
-                                      height: banner.size.height.toDouble(),
-                                      width: banner.size.width.toDouble(),
-                                      child: AdWidget(
-                                        ad: banner,
-                                      ),
+                                  ListTile(
+                                    trailing: c.list[index].inCloud ? Icon(Icons.cloud_outlined) : null,
+                                    title: Text(c.list[index].name),
+                                    shape: RoundedRectangleBorder(
+                                      side: BorderSide(color: themeData.cardColor, width: 0.2),
                                     ),
-                                  ],
-                                ),
-                              ListTile(
-                                trailing: c.list[index].inCloud ? Icon(Icons.cloud_outlined) : null,
-                                title: Text(c.list[index].name),
-                                shape: RoundedRectangleBorder(
-                                  side: BorderSide(color: themeData.cardColor, width: 0.2),
-                                ),
-                                onTap: () {
-                                  RouteManager.normalRoute(
-                                    RouteName.TODOLIST,
-                                    parameters: {
-                                      Parameter.LIST: json.encode(c.list[index]),
+                                    onTap: () {
+                                      RouteManager.normalRoute(
+                                        RouteName.TODOLIST,
+                                        parameters: {
+                                          Parameter.LIST: json.encode(c.list[index]),
+                                        },
+                                      );
                                     },
-                                  );
-                                },
-                              )
-                            ],
+                                  )
+                                ],
+                              );
+                            },
                           );
                         },
                         separatorBuilder: (BuildContext context, int index) {
                           return SizedBox();
                         },
                       ),
-                    ],
-                  ),
+              ),
+            ],
           ),
         );
       }),

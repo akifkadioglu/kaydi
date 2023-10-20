@@ -13,7 +13,14 @@ class _ListUsersViewState extends BaseState<ListUsersView> {
   @override
   Widget build(BuildContext context) {
     return BaseView(builder: (context) {
-      return Scaffold();
+      return Scaffold(
+        body: ListView.builder(
+          itemCount: 0,
+          itemBuilder: (context, index) {
+            return ListTile();
+          },
+        ),
+      );
     });
   }
 }

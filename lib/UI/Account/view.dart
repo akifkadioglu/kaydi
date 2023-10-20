@@ -2,8 +2,10 @@ import 'package:bottom_sheet/bottom_sheet.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kaydi_mobile/UI/Account/controller.dart';
+import 'package:kaydi_mobile/UI/Account/view_controller.dart';
 import 'package:kaydi_mobile/UI/Components/AppBar.dart';
 import 'package:kaydi_mobile/core/base/state.dart';
 import 'package:kaydi_mobile/core/constants/components.dart';
@@ -21,6 +23,7 @@ class AccountView extends StatefulWidget {
 
 class _AccountViewState extends BaseState<AccountView> {
   final FirebaseAuth auth = FirebaseAuth.instance;
+  AccountViewController c = Get.put(AccountViewController());
   @override
   void initState() {
     isAllowRequest(auth.currentUser!.uid);
@@ -107,15 +110,23 @@ class _AccountViewState extends BaseState<AccountView> {
                 ),
               ),
               Divider(),
-              ListTile(
-                title: Text(translate(IKey.LIST_REQUESTS)),
-                subtitle: Text(translate(IKey.LIST_REQUESTS_DESCRIPTION)),
-                trailing: Switch(
-                  activeColor: Color.fromARGB(255, 40, 194, 255),
-                  value: true,
-                  onChanged: (value) {},
+              Obx(
+                () => ListTile(
+                  title: Text(translate(IKey.LIST_REQUESTS)),
+                  subtitle: Text(translate(IKey.LIST_REQUESTS_DESCRIPTION)),
+                  trailing: c.isLoading.isFalse
+                      ? Switch(
+                          activeColor: Color.fromARGB(255, 40, 194, 255),
+                          value: c.isAllow.value,
+                          onChanged: (value) {
+                            switchAllow();
+                          },
+                        )
+                      : null,
+                  onTap: () {
+                    switchAllow();
+                  },
                 ),
-                onTap: () {},
               ),
               Divider(),
               ListTile(

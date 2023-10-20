@@ -41,7 +41,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     //StorageManager.instance.clearData();
     var app = StorageManager.instance.getData(SKey.APP);
-    print(app);
+    var notAllowedNotifications = StorageManager.instance.getData(SKey.NOTIFICATIONS);
     var lists = StorageManager.instance.getData(SKey.LISTS);
     if (app == null) {
       StorageManager.instance.setData(
@@ -59,6 +59,12 @@ class _MyAppState extends State<MyApp> {
       StorageManager.instance.setData(
         SKey.LISTS,
         json.encode(ListTaskModel(list: [])),
+      );
+    }
+    if (notAllowedNotifications == null) {
+      StorageManager.instance.setData(
+        SKey.NOTIFICATIONS,
+        json.encode([]),
       );
     }
 

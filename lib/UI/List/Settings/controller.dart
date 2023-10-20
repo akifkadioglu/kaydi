@@ -13,11 +13,11 @@ import 'package:kaydi_mobile/core/models/user_lists_model.dart';
 import 'package:kaydi_mobile/core/storage/manager.dart';
 import 'package:kaydi_mobile/core/toast/manager.dart';
 
-void checkCloud(String id) {
+void checkCloud() {
   ListsController c = Get.put(ListsController());
   var list = StorageManager.instance.getData(SKey.LISTS);
   var model = listTaskModelFromJson(list);
-  c.theList.value.inCloud = model.list.firstWhereOrNull((element) => element.id == id)?.inCloud ?? true;
+  c.theList.value.inCloud = model.list.firstWhereOrNull((element) => element.id == c.theList.value.id)?.inCloud ?? true;
   c.theList.refresh();
 }
 
@@ -80,4 +80,28 @@ void moveToCloud(String id) async {
   c.list.refresh();
   c.theList.refresh();
   todoController.setLoading;
+}
+
+void switchNotification() {
+  ListsController c = Get.put(ListsController());
+  var notifications = StorageManager.instance.getList(SKey.NOTIFICATIONS);
+  TodoListSettingsViewController todoController = Get.put(TodoListSettingsViewController());
+  if (todoController.notification.value) {
+    todoController.notification.value = false;
+    notifications.add(c.theList.value.id);
+    StorageManager.instance.setList(SKey.NOTIFICATIONS, notifications);
+  } else {
+    todoController.notification.value = true;
+    notifications.removeWhere((id) => id == c.theList.value.id);
+    StorageManager.instance.setList(SKey.NOTIFICATIONS, notifications);
+  }
+  todoController.notification.refresh();
+}
+
+void getNotification() {
+  ListsController c = Get.put(ListsController());
+  var notifications = StorageManager.instance.getList(SKey.NOTIFICATIONS);
+  TodoListSettingsViewController todoController = Get.put(TodoListSettingsViewController());
+
+  todoController.notification.value = !notifications.contains(c.theList.value.id);
 }

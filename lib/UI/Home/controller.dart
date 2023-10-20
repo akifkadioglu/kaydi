@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:kaydi_mobile/UI/Home/view_controller.dart';
+import 'package:kaydi_mobile/core/ads/service.dart';
 import 'package:kaydi_mobile/core/cloud/manager.dart';
 import 'package:kaydi_mobile/core/controllers/lists_controllers.dart';
 import 'package:kaydi_mobile/core/models/list_task.dart';
@@ -38,13 +40,13 @@ void getCloud() async {
   }
   ListsController c = Get.put(ListsController());
 
-  var dneme = await CloudManager.getCollection(CloudManager.USER_LISTS)
+  var lists = await CloudManager.getCollection(CloudManager.USER_LISTS)
       .where('user_id', isEqualTo: auth.currentUser?.uid)
       .get();
 
   List<String> listIds = [""];
 
-  for (QueryDocumentSnapshot document in dneme.docs) {
+  for (QueryDocumentSnapshot document in lists.docs) {
     listIds.add(document['list_id']);
   }
   var x = await CloudManager.getCollection(CloudManager.LISTS).where('id', whereIn: listIds).get();
@@ -66,4 +68,14 @@ void getCloud() async {
 
   c.list.sort((a, b) => a.name.compareTo(b.name));
   homeController.setLoading;
+}
+
+Future<dynamic> loadBannerAd() async {
+  bool result = await InternetConnectionChecker().hasConnection;
+
+  if (result) {
+    BannerAd banner = await AdMobService().getAd();
+    return banner;
+  }
+  return null;
 }

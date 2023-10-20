@@ -31,7 +31,8 @@ class _TodoListSettingsView extends BaseState<TodoListSettingsView> {
   void initState() {
     super.initState();
     c.theList.value = ListElement.fromJson(jsonDecode(Get.parameters[Parameter.LIST].toString()));
-    checkCloud(c.theList.value.id);
+    checkCloud();
+    getNotification();
   }
 
   @override
@@ -79,12 +80,18 @@ class _TodoListSettingsView extends BaseState<TodoListSettingsView> {
               Divider(),
               ListTile(
                 title: Text(translate(IKey.NOTIFICATIONS)),
-                trailing: Switch(
-                  activeColor: Color.fromARGB(255, 40, 194, 255),
-                  value: true,
-                  onChanged: (value) {},
+                trailing: Obx(
+                  () => Switch(
+                    activeColor: Color.fromARGB(255, 40, 194, 255),
+                    value: todoListController.notification.value,
+                    onChanged: (value) {
+                      switchNotification();
+                    },
+                  ),
                 ),
-                onTap: () {},
+                onTap: () {
+                  switchNotification();
+                },
               ),
               Divider(),
               Obx(
@@ -118,7 +125,7 @@ class _TodoListSettingsView extends BaseState<TodoListSettingsView> {
                 ),
               ),
               Divider(),
-              ListTile(
+              /* ListTile(
                 leading: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -127,8 +134,8 @@ class _TodoListSettingsView extends BaseState<TodoListSettingsView> {
                 ),
                 title: Text(translate(IKey.USERS)),
                 onTap: () {},
-                
               ),
+              Divider(), */
               ListTile(
                 leading: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
