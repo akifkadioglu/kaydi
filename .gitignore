@@ -51,3 +51,6 @@ key.jks
 
 # google services
 /android/app/google-services.json
+
+# notification
+/lib/core/notifications/manager.dart

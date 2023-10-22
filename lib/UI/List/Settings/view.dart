@@ -125,17 +125,29 @@ class _TodoListSettingsView extends BaseState<TodoListSettingsView> {
                 ),
               ),
               Divider(),
-              /* ListTile(
-                leading: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(MdiIcons.accountOutline),
-                  ],
+              Obx(
+                () => SizedBox(
+                  child: c.theList.value.inCloud
+                      ? Column(
+                          children: [
+                            ListTile(
+                              leading: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(MdiIcons.accountOutline),
+                                ],
+                              ),
+                              title: Text(translate(IKey.USERS)),
+                              onTap: () {
+                                RouteManager.normalRoute(RouteName.LIST_USERS);
+                              },
+                            ),
+                            Divider(),
+                          ],
+                        )
+                      : SizedBox(),
                 ),
-                title: Text(translate(IKey.USERS)),
-                onTap: () {},
               ),
-              Divider(), */
               ListTile(
                 leading: Column(
                   mainAxisAlignment: MainAxisAlignment.center,

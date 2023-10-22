@@ -20,11 +20,12 @@ void createTask(String task, ListElement theList) async {
   c.task.add(newTask);
   model.list.firstWhereOrNull((element) => element.id == theList.id)?.task.add(newTask);
   StorageManager.instance.setData(SKey.LISTS, json.encode(model));
-  print(theList.inCloud);
+
   if (theList.inCloud) {
     var docRef = CloudManager.getDoc(CloudManager.LISTS, theList.id);
     await docRef.update({
       "task": FieldValue.arrayUnion([newTask.toJson()]),
     });
+    await c.sendNotificationToListUsers("Yeni görev eklendi");
   }
 }

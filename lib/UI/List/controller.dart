@@ -14,7 +14,7 @@ void getTasks() async {
   ListsController c = Get.put(ListsController());
   c.task.value = c.list.firstWhere((element) => element.id == c.theList.value.id).task;
 
-  c.theListUserIds.clear();
+  c.theListUserIds.value = [""];
   var usersOfList =
       await CloudManager.getCollection(CloudManager.USER_LISTS).where('list_id', isEqualTo: c.theList.value.id).get();
 

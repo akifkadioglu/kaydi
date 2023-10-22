@@ -37,4 +37,5 @@ enum SKey {
   APP,
   LISTS,
   NOTIFICATIONS,
+  FCM_TOKEN,
 }

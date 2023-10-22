@@ -20,6 +20,7 @@ void searchEmail(String mail) async {
       email: e["email"],
       name: e["name"],
       isAllowRequest: e["is_allow_request"],
+      fcmToken: e["fcm_token"] ?? "",
     ),
   );
   c.setLoading;
@@ -74,7 +75,7 @@ Future<dynamic> addUserDialog(BuildContext context, double width, UserModel user
                             await CloudManager.getCollection(CloudManager.USER_LISTS).add(
                               UserListsModel(userId: user.id, listId: c.theList.value.id).toJson(),
                             );
-
+                            c.sendNotificationToListUsers(user.name + " listeye eklendi");
                             todoListSearchViewController.setLoading;
                             RouteManager.back();
                             RouteManager.back();

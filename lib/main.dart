@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -8,6 +10,7 @@ import 'package:kaydi_mobile/core/constants/app.dart';
 import 'package:kaydi_mobile/core/language/initialize.dart';
 import 'package:kaydi_mobile/core/models/app.dart';
 import 'package:kaydi_mobile/core/models/list_task.dart';
+import 'package:kaydi_mobile/core/notifications/manager.dart';
 import 'package:kaydi_mobile/core/routes/route_names.dart';
 import 'package:kaydi_mobile/core/routes/routes.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -15,12 +18,31 @@ import 'package:get_storage/get_storage.dart';
 import 'package:kaydi_mobile/core/storage/manager.dart';
 import 'package:firebase_core/firebase_core.dart';
 
+Future<void> backgroundMessage(RemoteMessage message) async {
+  final notificationData = (message.notification?.toMap() ?? {}).map(
+    (key, value) => MapEntry(key, value.toString()),
+  );
+  print(notificationData);
+  await AwesomeNotifications().createNotification(
+    content: NotificationContent(
+      id: message.messageId.hashCode,
+      channelKey: 'alerts',
+      title: message.notification?.title ?? '',
+      body: message.notification?.body ?? '',
+      payload: notificationData,
+    ),
+  );
+}
+
 void main() async {
   await GetStorage.init();
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
   await Firebase.initializeApp();
+  await NotificationManager().initNotifications();
   HomeWidget.setAppGroupId('com.kaydiApp');
+  FirebaseMessaging.onBackgroundMessage(backgroundMessage);
+
   runApp(const MyApp());
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 }
@@ -39,7 +61,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    //StorageManager.instance.clearData();
     var app = StorageManager.instance.getData(SKey.APP);
     var notAllowedNotifications = StorageManager.instance.getData(SKey.NOTIFICATIONS);
     var lists = StorageManager.instance.getData(SKey.LISTS);
