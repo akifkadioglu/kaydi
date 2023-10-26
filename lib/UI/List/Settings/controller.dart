@@ -78,7 +78,7 @@ void moveToCloud(String id) async {
   StorageManager.instance.setData(SKey.LISTS, json.encode(model));
 
   c.theList.value.inCloud = true;
-  c.list.firstWhereOrNull((element) => element.id == id)?.inCloud = true;
+  c.list.removeWhere((element) => element.id == id);
   c.list.refresh();
   c.theList.refresh();
   todoController.setLoading;

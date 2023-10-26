@@ -1,5 +1,4 @@
-import 'dart:convert';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +10,6 @@ import 'package:kaydi_mobile/UI/Home/view_controller.dart';
 import 'package:kaydi_mobile/core/base/state.dart';
 import 'package:kaydi_mobile/core/base/view.dart';
 import 'package:kaydi_mobile/core/constants/app.dart';
-import 'package:kaydi_mobile/core/constants/parameters.dart';
 import 'package:kaydi_mobile/core/constants/texts.dart';
 import 'package:kaydi_mobile/core/controllers/lists_controllers.dart';
 import 'package:kaydi_mobile/core/language/initialize.dart';
@@ -30,11 +28,6 @@ class _HomeViewState extends BaseState<HomeView> {
   ListsController c = Get.put(ListsController());
   final FirebaseAuth auth = FirebaseAuth.instance;
   HomeViewController homeViewController = Get.put(HomeViewController());
-  @override
-  void initState() {
-    super.initState();
-    getCloud();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,88 +53,91 @@ class _HomeViewState extends BaseState<HomeView> {
         ],
       ),
       body: BaseView(builder: (context) {
-        return Obx(
-          () => ListView(
-            physics: BouncingScrollPhysics(),
-            children: [
-              homeViewController.isLoading.value ? LinearProgressIndicator() : SizedBox(),
-              SizedBox(
+        return ListView(
+          physics: BouncingScrollPhysics(),
+          children: [
+            StreamBuilder<QuerySnapshot>(
+              stream: getCollectionStream(),
+              builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.hasError) {
+                  return SizedBox();
+                }
+                Future.delayed(Duration.zero, () async {
+                  handleDataChange(snapshot.data);
+                });
+                return SizedBox();
+              },
+            ),
+            Obx(
+              () => SizedBox(
                 child: c.list.length == 0
-                    ? Center(
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: dynamicWidth(0.05)),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Divider(),
-                              Icon(Icons.task_alt_rounded, size: 100),
-                              Text(
-                                translate(IKey.FINISH_LIST_DESCRIPTION),
-                                textAlign: TextAlign.center,
-                                style: GoogleFonts.getFont(TextConstants.EmptyListText, fontSize: 16),
-                              ),
-                              Divider(),
-                            ]
-                                .map(
-                                  (e) => Padding(
-                                    padding: EdgeInsets.symmetric(vertical: 10),
-                                    child: e,
-                                  ),
-                                )
-                                .toList(),
-                          ),
+                    ? Padding(
+                        padding: EdgeInsets.symmetric(horizontal: dynamicWidth(0.05)),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Divider(),
+                            Icon(Icons.task_alt_rounded, size: 100),
+                            Text(
+                              translate(IKey.FINISH_LIST_DESCRIPTION),
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.getFont(TextConstants.EmptyListText, fontSize: 16),
+                            ),
+                            Divider(),
+                          ]
+                              .map(
+                                (e) => Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 10),
+                                  child: e,
+                                ),
+                              )
+                              .toList(),
                         ),
                       )
-                    : ListView.separated(
+                    : ListView.builder(
                         shrinkWrap: true,
                         physics: ClampingScrollPhysics(),
                         itemCount: c.list.length,
                         itemBuilder: (context, index) {
-                          return FutureBuilder(
-                            future: loadBannerAd(),
-                            builder: (context, snapshot) {
-                              print(snapshot.data);
-                              return Column(
-                                children: [
-                                  if (index % 3 == 0 && snapshot.data != null)
-                                    Container(
-                                      decoration: BoxDecoration(color: themeData.cardColor),
-                                      padding: const EdgeInsets.symmetric(vertical: 40.0),
-                                      child: SizedBox(
-                                        height: snapshot.data.size.height.toDouble(),
-                                        width: snapshot.data.size.width.toDouble(),
-                                        child: AdWidget(
-                                          ad: snapshot.data,
-                                        ),
-                                      ),
-                                    ),
-                                  ListTile(
-                                    trailing: c.list[index].inCloud ? Icon(Icons.cloud_outlined) : null,
-                                    title: Text(c.list[index].name),
-                                    shape: RoundedRectangleBorder(
-                                      side: BorderSide(color: themeData.cardColor, width: 0.2),
-                                    ),
-                                    onTap: () {
-                                      RouteManager.normalRoute(
-                                        RouteName.TODOLIST,
-                                        parameters: {
-                                          Parameter.LIST: json.encode(c.list[index]),
-                                        },
-                                      );
-                                    },
-                                  )
-                                ],
-                              );
-                            },
+                          return Column(
+                            children: [
+                              FutureBuilder(
+                                future: loadBannerAd(),
+                                builder: (context, snapshot) {
+                                  return index % 3 == 0 && snapshot.data != null
+                                      ? Container(
+                                          decoration: BoxDecoration(color: themeData.cardColor),
+                                          padding: const EdgeInsets.symmetric(vertical: 40.0),
+                                          child: SizedBox(
+                                            height: snapshot.data.size.height.toDouble(),
+                                            width: snapshot.data.size.width.toDouble(),
+                                            child: AdWidget(
+                                              ad: snapshot.data,
+                                            ),
+                                          ),
+                                        )
+                                      : SizedBox();
+                                },
+                              ),
+                              ListTile(
+                                trailing: c.list[index].inCloud ? Icon(Icons.cloud_outlined) : null,
+                                title: Text(c.list[index].name),
+                                shape: RoundedRectangleBorder(
+                                  side: BorderSide(color: themeData.cardColor, width: 0.2),
+                                ),
+                                onTap: () {
+                                  c.theList.value = c.list[index];
+
+                                  RouteManager.normalRoute(RouteName.TODOLIST);
+                                },
+                              )
+                            ],
                           );
-                        },
-                        separatorBuilder: (BuildContext context, int index) {
-                          return SizedBox();
                         },
                       ),
               ),
-            ],
-          ),
+            ),
+          ],
         );
       }),
       bottomNavigationBar: Padding(

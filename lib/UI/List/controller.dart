@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:kaydi_mobile/core/cloud/manager.dart';
 import 'package:kaydi_mobile/core/controllers/lists_controllers.dart';
 import 'package:kaydi_mobile/core/language/initialize.dart';
@@ -12,14 +13,36 @@ import 'package:kaydi_mobile/core/storage/manager.dart';
 
 void getTasks() async {
   ListsController c = Get.put(ListsController());
-  c.task.value = c.list.firstWhere((element) => element.id == c.theList.value.id).task;
-
   c.theListUserIds.value = [""];
   var usersOfList =
       await CloudManager.getCollection(CloudManager.USER_LISTS).where('list_id', isEqualTo: c.theList.value.id).get();
 
   for (var element in usersOfList.docs) {
     c.theListUserIds.add(element['user_id']);
+  }
+}
+
+Stream<DocumentSnapshot<Map<String, dynamic>>> monitorDocument() {
+  ListsController c = Get.put(ListsController());
+  c.task.clear();
+  return CloudManager.getDoc(CloudManager.LISTS, c.theList.value.id).snapshots();
+}
+
+void handleDataChange(DocumentSnapshot? snapshot) async {
+  bool result = await InternetConnectionChecker().hasConnection;
+  if (snapshot == null || !result) {
+    return;
+  }
+  var tasks =
+      (snapshot["task"] as List<dynamic>).map((e) => Task(id: e["id"], task: e["task"], isChecked: e["is_checked"]));
+  ListsController c = Get.put(ListsController());
+  if (c.task.length < tasks.length) {
+    for (var element in tasks) {
+      c.task.addIf(
+        c.task.firstWhereOrNull((x) => x.id == element.id) == null,
+        element,
+      );
+    }
   }
 }
 

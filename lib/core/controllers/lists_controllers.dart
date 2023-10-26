@@ -7,6 +7,7 @@ import 'package:kaydi_mobile/core/storage/manager.dart';
 import 'package:kaydi_mobile/core/models/notification_model.dart' as fbm;
 
 class ListsController extends GetxController {
+  var listIds = <String>[].obs;
   var list = <ListElement>[].obs;
   var task = <Task>[].obs;
   var theList = ListElement(id: "", name: "", task: [], inCloud: false).obs;
@@ -34,5 +35,19 @@ class ListsController extends GetxController {
     var users = await CloudManager.getCollection(CloudManager.USERS).where('id', whereIn: theListUserIds).get();
     List<String> tokens = users.docs.map((e) => e['fcm_token'].toString()).toList();
     NotificationManager().SendNotification(tokens, fbm.Notification(body: body, title: theList.value.name));
+  }
+
+  bool areListsEqual(List<dynamic> list1, List<dynamic> list2) {
+    if (list1.length != list2.length) {
+      return false;
+    }
+
+    for (var i = 0; i < list1.length; i++) {
+      if (list1[i] != list2[i]) {
+        return false;
+      }
+    }
+
+    return true;
   }
 }

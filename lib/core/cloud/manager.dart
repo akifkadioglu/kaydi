@@ -15,4 +15,12 @@ class CloudManager {
   static CollectionReference<Map<String, dynamic>> getCollection(String collection) {
     return FirebaseFirestore.instance.collection(collection);
   }
+
+  static void handleDataChange(QuerySnapshot snapshot) {
+    for (QueryDocumentSnapshot doc in snapshot.docs) {
+      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+      print("Document ID: ${doc.id}");
+      print("Data: $data");
+    }
+  }
 }
