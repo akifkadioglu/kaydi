@@ -13,6 +13,7 @@ import 'package:kaydi_mobile/core/storage/manager.dart';
 
 void getTasks() async {
   ListsController c = Get.put(ListsController());
+  c.task.value = c.theList.value.task;
   c.theListUserIds.value = [""];
   var usersOfList =
       await CloudManager.getCollection(CloudManager.USER_LISTS).where('list_id', isEqualTo: c.theList.value.id).get();

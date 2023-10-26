@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:kaydi_mobile/core/cloud/manager.dart';
+import 'package:kaydi_mobile/core/language/initialize.dart';
 import 'package:kaydi_mobile/core/models/list_task.dart';
 import 'package:kaydi_mobile/core/notifications/manager.dart';
 import 'package:kaydi_mobile/core/storage/manager.dart';
@@ -30,11 +31,13 @@ class ListsController extends GetxController {
     }
   }
 
-  Future<void> sendNotificationToListUsers(String body) async {
-    print(theListUserIds);
+  Future<void> sendNotificationToListUsers(IKey body, {String? info = ""}) async {
     var users = await CloudManager.getCollection(CloudManager.USERS).where('id', whereIn: theListUserIds).get();
     List<String> tokens = users.docs.map((e) => e['fcm_token'].toString()).toList();
-    NotificationManager().SendNotification(tokens, fbm.Notification(body: body, title: theList.value.name));
+    NotificationManager().SendNotification(
+      tokens,
+      fbm.Notification(body: body.name, title: theList.value.name + (info! != "" ? " - " + info : "")),
+    );
   }
 
   bool areListsEqual(List<dynamic> list1, List<dynamic> list2) {

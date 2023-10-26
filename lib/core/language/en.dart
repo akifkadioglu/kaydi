@@ -45,5 +45,8 @@ Map<String, String> get English => {
       IKey.ADD_USER_TO_LIST.name: 'is about to be added',
       IKey.ADD.name: 'Add',
       IKey.ALREADY_ADDED_TO_LIST.name: 'Already added to the list',
-      
+      IKey.DELETE_ACCOUNT.name: 'Delete your account',
+      IKey.NEW_TASK_ADDED.name: 'A new task added!',
+      IKey.ADD_SOMEONE_TO_LIST.name: 'Someone joined your list!',
+      IKey.LEAVED_FROM_LIST.name: 'Someone left your list!',
     };

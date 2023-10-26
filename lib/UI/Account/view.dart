@@ -138,6 +138,16 @@ class _AccountViewState extends BaseState<AccountView> {
                   RouteManager.goRouteAndRemoveBefore(RouteName.LOGIN);
                 },
               ),
+              Divider(),
+              ListTile(
+                title: Text(
+                  translate(IKey.DELETE_ACCOUNT),
+                  style: TextStyle(color: Colors.red),
+                ),
+                onTap: () {
+                  deleteAccountDialog(context, dynamicWidth(0.3));
+                },
+              ),
             ],
           ),
         ),

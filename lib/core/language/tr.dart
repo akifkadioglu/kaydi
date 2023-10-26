@@ -45,4 +45,8 @@ Map<String, String> get Turkish => {
       IKey.ADD_USER_TO_LIST.name: 'eklenmek üzere',
       IKey.ADD.name: 'Ekle',
       IKey.ALREADY_ADDED_TO_LIST.name: 'Zaten listeye eklendi',
+      IKey.DELETE_ACCOUNT.name: 'Hesabını sil',
+      IKey.NEW_TASK_ADDED.name: 'Yeni görev eklendi!',
+      IKey.ADD_SOMEONE_TO_LIST.name: 'Birisi listene katıldı!',
+      IKey.LEAVED_FROM_LIST.name: 'Birisi listenden ayrıldı!',
     };

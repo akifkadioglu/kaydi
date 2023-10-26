@@ -12,8 +12,6 @@ String translate(IKey? key) {
 }
 
 void ChangeLanguage(Locale locale) {
-  // StorageManager.instance.setData(SKey.APP, )
-
   var app = StorageManager.instance.getData(SKey.APP);
   var model = appModelFromJson(app);
   model.language = locale.toString();
@@ -80,4 +78,8 @@ enum IKey {
   ADD,
   ADD_USER_TO_LIST,
   ALREADY_ADDED_TO_LIST,
+  DELETE_ACCOUNT,
+  NEW_TASK_ADDED,
+  ADD_SOMEONE_TO_LIST,
+  LEAVED_FROM_LIST,
 }

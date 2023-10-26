@@ -46,7 +46,7 @@ void leaveFromList(String id) async {
     });
   });
 
-  c.sendNotificationToListUsers((auth.currentUser?.displayName ?? "") + " listeden ayrıldı");
+  c.sendNotificationToListUsers(IKey.LEAVED_FROM_LIST,info: auth.currentUser?.displayName);
 
   CloudManager.getDoc(CloudManager.USER_LISTS, id).delete();
   c.list.refresh();

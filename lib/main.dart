@@ -22,13 +22,13 @@ Future<void> backgroundMessage(RemoteMessage message) async {
   final notificationData = (message.notification?.toMap() ?? {}).map(
     (key, value) => MapEntry(key, value.toString()),
   );
-  print(notificationData);
+
   await AwesomeNotifications().createNotification(
     content: NotificationContent(
       id: message.messageId.hashCode,
       channelKey: 'alerts',
       title: message.notification?.title ?? '',
-      body: message.notification?.body ?? '',
+      body: translate(IKey.values.byName(message.notification?.body?.tr ?? "")),
       payload: notificationData,
     ),
   );

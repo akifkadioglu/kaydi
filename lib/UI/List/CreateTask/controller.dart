@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:kaydi_mobile/core/cloud/manager.dart';
 import 'package:kaydi_mobile/core/controllers/lists_controllers.dart';
+import 'package:kaydi_mobile/core/language/initialize.dart';
 import 'package:kaydi_mobile/core/models/list_task.dart';
 import 'package:kaydi_mobile/core/storage/manager.dart';
 import 'package:uuid/uuid.dart';
@@ -26,6 +27,6 @@ void createTask(String task, ListElement theList) async {
     await docRef.update({
       "task": FieldValue.arrayUnion([newTask.toJson()]),
     });
-    await c.sendNotificationToListUsers("Yeni görev eklendi");
+    await c.sendNotificationToListUsers(IKey.NEW_TASK_ADDED);
   }
 }

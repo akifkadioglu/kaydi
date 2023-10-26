@@ -54,18 +54,20 @@ class _TodoListViewState extends BaseState<TodoListView> {
       ),
       body: Column(
         children: [
-          StreamBuilder<DocumentSnapshot>(
-            stream: monitorDocument(),
-            builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-              if (snapshot.hasError) {
-                return SizedBox();
-              }
-              Future.delayed(Duration.zero, () async {
-                handleDataChange(snapshot.data);
-              });
-              return SizedBox();
-            },
-          ),
+          c.theList.value.inCloud
+              ? StreamBuilder<DocumentSnapshot>(
+                  stream: monitorDocument(),
+                  builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                    if (snapshot.hasError) {
+                      return SizedBox();
+                    }
+                    Future.delayed(Duration.zero, () async {
+                      handleDataChange(snapshot.data);
+                    });
+                    return SizedBox();
+                  },
+                )
+              : SizedBox(),
           Obx(
             () => SizedBox(
               child: c.task.length == 0

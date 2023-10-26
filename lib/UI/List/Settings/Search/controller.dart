@@ -75,7 +75,7 @@ Future<dynamic> addUserDialog(BuildContext context, double width, UserModel user
                             await CloudManager.getCollection(CloudManager.USER_LISTS).add(
                               UserListsModel(userId: user.id, listId: c.theList.value.id).toJson(),
                             );
-                            c.sendNotificationToListUsers(user.name + " listeye eklendi");
+                            c.sendNotificationToListUsers(IKey.ADD_SOMEONE_TO_LIST,info: user.name);
                             todoListSearchViewController.setLoading;
                             RouteManager.back();
                             RouteManager.back();
